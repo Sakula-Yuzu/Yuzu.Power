@@ -1,0 +1,8 @@
+{
+  "name": "yuzu-power-site",
+  "private": true,
+  "scripts": {
+    "start": "npx --yes serve . -p 8080",
+    "dev": "npx --yes serve . -p 8080"
+  }
+}

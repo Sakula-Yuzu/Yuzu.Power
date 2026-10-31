@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Yuzu.Power — 实时充放电功率记录</title>
+  <meta name="description" content="Yuzu.Power（柚.Power）是 Sakula_小柚柚 开发的轻量级安卓功率记录应用。查看瞬时功率、电压、电流、温度，以及每一次充放电会话。" />
+  <meta name="theme-color" content="#121018" />
+  <meta property="og:title" content="Yuzu.Power — 实时充放电功率记录" />
+  <meta property="og:description" content="轻量级安卓功率记录应用。瞬时功率、电压、电流、温度与完整充放电会话。" />
+  <meta property="og:image" content="og.jpg" />
+  <meta property="og:type" content="website" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Outfit:wght@460;580;720&display=swap" />
+  <link rel="stylesheet" href="site.css" />
+</head>
+<body>
+<div class="yp" id="yp">
+  <div class="accent-bar"></div>
+  <header class="top">
+    <div class="wrap top-row">
+      <a class="logo" href="#top">Yuzu<span>.</span>Power</a>
+      <nav class="desk" aria-label="页面">
+        <a href="#features">功能</a>
+        <a href="#shots">界面</a>
+        <a href="#devices">机型</a>
+        <a href="#log">更新</a>
+        <a href="#download">下载</a>
+      </nav>
+      <div class="top-actions">
+        <a class="btn btn-solid desk-only" href="https://github.com/Sakula-Yuzu/Yuzu.Power/releases/download/%E6%AD%A3%E5%BC%8F%E7%89%881.4.0/Yuzu.Power-PL.apk">下载 1.4.0</a>
+        <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="mobile-nav" aria-label="打开菜单">
+          <span></span><span></span>
+        </button>
+      </div>
+    </div>
+    <nav id="mobile-nav" class="mobile" hidden>
+      <a href="#features">功能</a>
+      <a href="#shots">界面</a>
+      <a href="#devices">机型</a>
+      <a href="#log">更新</a>
+      <a href="#download">下载</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="wrap hero">
+      <div>
+        <p class="kicker">实时功率记录 · 轻量 简洁 好用</p>
+        <h1>把每一次充放电，记成看得见的曲线。</h1>
+        <p class="lead">Yuzu.Power（柚.Power）是哔哩哔哩 UP 主 Sakula_小柚柚为数码爱好者做的轻量级安卓应用。打开就能看到瞬时功率、电压、电流、温度，以及完整的充放电会话。</p>
+        <div class="actions">
+          <a class="btn btn-solid" href="https://github.com/Sakula-Yuzu/Yuzu.Power/releases/download/%E6%AD%A3%E5%BC%8F%E7%89%881.4.0/Yuzu.Power-PL.apk">下载APK</a>
+          <a class="btn btn-ghost" href="#demo">演示仪表</a>
+        </div>
+        <dl class="stats">
+          <div><dt>当前版本</dt><dd>1.4.0</dd></div>
+          <div><dt>作者标注覆盖</dt><dd>98.6%</dd></div>
+          <div><dt>平台</dt><dd>Android</dd></div>
+        </dl>
+      </div>
+      <figure class="phone">
+        <div class="bezel">
+          <img src="shots/home.jpg" width="720" height="1600" alt="Yuzu.Power 1.4.0 主界面，显示放电功率、电压、电流和电荷量" />
+        </div>
+        <figcaption>正式版 1.4.0 主界面，截自作者发布的更新说明</figcaption>
+      </figure>
+    </section>
+
+    <section id="demo" class="band">
+      <div class="wrap demo">
+        <div>
+          <h2>主界面</h2>
+          <p class="lead">下面这组数字在浏览器里走动，只为说明布局：正值是充入，负值是耗电。真正的读数来自你的手机系统，请安装应用查看。</p>
+          <ul class="notes">
+            <li>自动采用系统给出的功率单位。</li>
+            <li>状态行会标出正在充电还是放电。</li>
+            <li>曲线、会话和电荷量在应用里可以点进详情。</li>
+          </ul>
+        </div>
+        <div class="meter" id="meter">
+          <div class="meter-head">
+            <div>
+              <p class="meter-title">浏览器里的仪表</p>
+              <p class="fine">示意数据，不会读取这台设备的电池</p>
+            </div>
+            <div class="seg" role="group" aria-label="充放电">
+              <button type="button" data-mode="drain" aria-pressed="true">放电</button>
+              <button type="button" data-mode="charge" aria-pressed="false">充电</button>
+            </div>
+          </div>
+          <div class="screen">
+            <div class="screen-top">
+              <p>Yuzu.Power</p>
+              <p class="status" id="meter-status">状态：放电中</p>
+            </div>
+            <div class="tiles">
+              <div class="tile"><p>瞬时功率</p><p class="num" id="m-w">-5.40 <span>W</span></p></div>
+              <div class="tile"><p>电池温度</p><p class="num" id="m-t">30.1 <span>°C</span></p></div>
+              <div class="tile"><p>电池电压</p><p class="num" id="m-v">3.96 <span>V</span></p></div>
+              <div class="tile"><p>电池电流</p><p class="num" id="m-a">-1364 <span>mA</span></p></div>
+              <div class="tile"><p>供电状态</p><p class="num" id="m-src">电池供电</p></div>
+              <div class="tile"><p>电池状态</p><p class="num">良好</p></div>
+            </div>
+            <div class="panel">
+              <div class="panel-top"><span>系统剩余电荷量 / 总电荷量</span><strong>58%</strong></div>
+              <p class="mah">2901 / 5000 mAh</p>
+              <div class="bar"><span></span></div>
+            </div>
+            <div class="panel">
+              <div class="panel-top"><span>功率曲线</span><span>W</span></div>
+              <svg viewBox="0 0 320 92" role="img" aria-label="示意功率曲线">
+                <path d="M0 46 H320" class="axis" />
+                <path id="meter-line" class="spark" d="" />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="wrap section">
+      <h2>应用里实际在做的事</h2>
+      <p class="sub">依据仓库说明和 1.4.0 界面整理，没有额外编造的传感器。</p>
+      <ul class="cards">
+        <li><h3>瞬时功率</h3><p>瓦特、伏特、毫安和温度放在同一屏。单位跟随系统读取，不用自己换算。</p></li>
+        <li><h3>充放电会话</h3><p>记下起止电量、峰值与平均功率、电流、温度、电荷量变化，以及结束原因。</p></li>
+        <li><h3>电荷量</h3><p>剩余电荷量、总电荷量和百分比一起看，充电记录和本次放电分开陈列。</p></li>
+        <li><h3>温度与曲线</h3><p>功率曲线跟着时间走。会话详情里还能对照温度和电量。</p></li>
+        <li><h3>灵动岛</h3><p>国产机的灵动岛可以显示实时功率，部分第三方灵动岛应用也支持。</p></li>
+        <li><h3>后台保活</h3><p>离开界面之后仍尽量保持读取，状态栏会写着还在放电或充电。</p></li>
+        <li><h3>外观</h3><p>主界面可以换壁纸，并调节壁纸与卡片的透明度、模糊。语言支持简体中文。</p></li>
+        <li><h3>没有电池也能看</h3><p>作者为无电池设备做了专门处理。OPPO 系电流单位不同，也做了单独优化。</p></li>
+      </ul>
+    </section>
+
+    <section id="shots" class="band">
+      <div class="wrap section">
+        <h2>1.4.0 的三张界面</h2>
+        <div class="gallery">
+          <figure>
+            <div class="shot"><img src="shots/home.jpg" width="720" height="1600" alt="主界面" /></div>
+            <figcaption><strong>主界面</strong><span>功率、电压、电流、温度、电荷量和最近一次充放电。</span></figcaption>
+          </figure>
+          <figure>
+            <div class="shot"><img src="shots/session.jpg" width="720" height="1600" alt="一次充电" /></div>
+            <figcaption><strong>一次充电</strong><span>峰值、平均、起止时间和结束原因，下面是功率、温度、电量曲线。</span></figcaption>
+          </figure>
+          <figure>
+            <div class="shot"><img src="shots/about.jpg" width="720" height="1600" alt="关于" /></div>
+            <figcaption><strong>关于</strong><span>版本、作者，以及应用里公开的致谢名单。</span></figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section id="devices" class="wrap section">
+      <div class="split">
+        <div>
+          <h2>机型说明，按作者原文</h2>
+          <p class="lead">仓库写明：外观是新一代轻量查看器，对主流手机的支持率达到 98.6%。中兴、努比亚、红魔上运行效果最佳；OPPO 系统的电流单位做了特别处理。没有电池的设备也能用。</p>
+        </div>
+        <ul class="chips">
+          <li><strong>98.6%</strong><span>作者标注的主流机型支持率</span></li>
+          <li><strong>中兴 / 努比亚 / 红魔</strong><span>说明里效果最佳的一批</span></li>
+          <li><strong>OPPO 系</strong><span>电流单位单独适配</span></li>
+          <li><strong>无电池设备</strong><span>也可以查看功率</span></li>
+        </ul>
+      </div>
+      <p class="fine note">部分异形屏仍可能欠佳。1.3.0 优化了一批显示问题；如果还有偏差，欢迎按下方渠道反馈。</p>
+    </section>
+
+    <section id="log" class="band">
+      <div class="wrap section">
+        <div class="row-title">
+          <h2>版本</h2>
+          <a href="https://github.com/Sakula-Yuzu/Yuzu.Power/releases">在 GitHub 查看全部发布</a>
+        </div>
+        <ol class="log">
+          <li><div><strong>1.4.0</strong><time>2026-09-16</time></div><p><em>当前正式版。</em>重构界面，并加入软件优化。如果卡在优化界面进不去，到系统里清除本应用数据后再打开。</p></li>
+          <li><div><strong>1.3.0</strong><time>2026-09-01</time></div><p>优化部分异形屏显示异常，并补充了第三方灵动岛进度的文字说明。</p></li>
+          <li><div><strong>1.2.0</strong><time>2026-08-20</time></div><p>修复部分界面返回时卡顿或黑屏，并重新排版了文字。</p></li>
+          <li><div><strong>1.0.0</strong><time>2026-08-09</time></div><p>打磨约一个月后的第一个正式版。</p></li>
+          <li><div><strong>0.2 众测</strong><time>2026-08-05</time></div><p>公开测试版。作者把反馈入口写在该版本说明里。</p></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="wrap section">
+      <h2>致谢</h2>
+      <p class="sub">以下名单来自应用「关于」页，排名不分先后。</p>
+      <dl class="credits">
+        <div><dt>作者</dt><dd>Sakula_小柚柚</dd></div>
+        <div><dt>图标设计与制作</dt><dd>九烨</dd></div>
+        <div><dt>宣传</dt><dd>时葱葱呀zZ</dd></div>
+        <div><dt>资金援助</dt><dd>黑衣清衫，牙科么肆么_免费方式，嘉豪</dd></div>
+        <div><dt>测试</dt><dd>时葱葱呀zZ，Key，黑衣清衫，不是夕瓜我不吃，牙科么肆么_免费方式</dd></div>
+      </dl>
+    </section>
+
+    <section class="band">
+      <div class="wrap section">
+        <h2>常见问题</h2>
+        <div class="faq">
+          <details>
+            <summary>这是 Switch 模拟器吗？<span class="plus" aria-hidden="true">+</span></summary>
+            <p>不是。Yuzu.Power 只记录手机的充放电功率，和任天堂主机、游戏模拟器没有关系。</p>
+          </details>
+          <details>
+            <summary>支持哪些手机？<span class="plus" aria-hidden="true">+</span></summary>
+            <p>安卓应用。作者在仓库说明里写，主流机型支持率 98.6%，中兴、努比亚、红魔上效果最好，并为 OPPO 系不同的电流单位做了适配。部分异形屏仍可能显示不佳。</p>
+          </details>
+          <details>
+            <summary>安装包从哪里来？<span class="plus" aria-hidden="true">+</span></summary>
+            <p>本页不托管文件。1.4.0 的 APK 在 GitHub Releases，文件名是 Yuzu.Power-PL.apk，大约 11.8 MB。安装前请允许来自该来源的应用。</p>
+          </details>
+          <details>
+            <summary>发现问题怎么说？<span class="plus" aria-hidden="true">+</span></summary>
+            <p>可以到 GitHub Issues，或使用众测版说明里留下的反馈入口。若某次问题被采纳修正，作者说过你可能会出现在贡献者名单里。</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section id="download" class="wrap section">
+      <div class="cta">
+        <p class="kicker">Android · 正式版 1.4.0</p>
+        <h2>从 GitHub 安装 Yuzu.Power</h2>
+        <p class="lead">文件名 Yuzu.Power-PL.apk，约 11.8 MB。若打开后停在优化界面，到系统的应用信息里清除数据再试。</p>
+        <div class="actions">
+          <a class="btn btn-solid" href="https://github.com/Sakula-Yuzu/Yuzu.Power/releases/download/%E6%AD%A3%E5%BC%8F%E7%89%881.4.0/Yuzu.Power-PL.apk">下载 APK</a>
+          <a class="btn btn-ghost" href="https://github.com/Sakula-Yuzu/Yuzu.Power">仓库</a>
+          <a class="btn btn-ghost" href="https://b23.tv/DTTEDLU">反馈入口</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="wrap foot-row">
+      <p>Yuzu.Power · Sakula_小柚柚</p>
+      <nav aria-label="更多">
+        <a href="https://github.com/Sakula-Yuzu">作者</a>
+        <a href="https://github.com/Sakula-Yuzu/Yuzu.Power/issues">Issues</a>
+        <a href="https://github.com/Sakula-Yuzu/Yuzu.Power/releases">Releases</a>
+      </nav>
+    </div>
+  </footer>
+</div>
+
+<script src="site.js"></script>
+</body>
+</html>
