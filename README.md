@@ -39,12 +39,13 @@
 
 前往 [Releases 页面](https://github.com/Sakula-Yuzu/Yuzu.Power/releases) 下载最新正式版或众测版。
 
-**当前最新版本**：`正式版 1.4.0`
+**当前最新版本**：`正式版 1.8.0`
 
 ### 版本历史概览
 
 | 版本 | 主要更新 |
 |------|----------|
+| **1.8.0** |全面重构，加入众多功能详见1.8.0版本页
 | **1.4.0** | 重构 UI，新增软件优化（卡在优化界面请清除数据后重试） |
 | **1.3.0** | 优化部分异形屏显示异常，添加第三方灵动岛进度显示教程 |
 | **1.2.0** | 修复界面返回卡顿/黑屏问题，优化文字排版 |
@@ -73,10 +74,12 @@
 > 如果你的反馈帮助修复了问题，有机会出现在贡献者名单中！
 
 ---
+##截图📷
+<img width="1080" height="2400" alt="1000039967" src="https://github.com/user-attachments/assets/310c91f7-8040-433b-980f-82948be25d84" />
+<img width="1080" height="2400" alt="1000039963" src="https://github.com/user-attachments/assets/b3712a39-e4fb-455e-aec7-a0b919c8e73e" />
+<img width="1080" height="2400" alt="1000039964" src="https://github.com/user-attachments/assets/631fdf49-94d3-4556-a3b5-bdf41bbd97f4" />
+<img width="1080" height="2400" alt="1000039965" src="https://github.com/user-attachments/assets/db819c3a-49e3-443b-ac98-51350a0fae2f" />
 
-## 📷 截图
-
-> （可在此处添加应用截图）
 
 ---
 
