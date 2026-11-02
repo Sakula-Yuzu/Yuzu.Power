@@ -91,6 +91,13 @@
 ---
 
 ## 📷 截图
+<img width="840" height="1867" alt="1000040159" src="https://github.com/user-attachments/assets/b8a0fb94-24c6-4e47-89ef-7262c6b5031c" />
+<img width="840" height="1867" alt="1000040164" src="https://github.com/user-attachments/assets/e7acbb6c-d6bb-4291-815e-f4cf334ae414" />
+<img width="840" height="1867" alt="1000040163" src="https://github.com/user-attachments/assets/a6e9ff39-c363-4d75-82bf-93b864f4d2af" />
+<img width="840" height="1867" alt="1000040162" src="https://github.com/user-attachments/assets/04285bd0-1dfb-4f96-bb43-1a5efa9dd51c" />
+<img width="840" height="1867" alt="1000040161" src="https://github.com/user-attachments/assets/d2697ec1-e281-4693-b045-c9f1576f81db" />
+<img width="840" height="1867" alt="1000040160" src="https://github.com/user-attachments/assets/56f44652-bf4f-49ec-9e53-fe4bb1ab6ec7" />
+
 
 （应用内截图请参考 Releases 页面或官方网站）
 
