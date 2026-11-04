@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Yuzu.Power">
-  <rect width="32" height="32" rx="7" fill="#1A1622"/>
-  <circle cx="16" cy="18" r="8.5" fill="#F3EEE6"/>
-  <path d="M16 18 L16 9.5 A8.5 8.5 0 0 1 23.1 13.4 Z" fill="#3F2D78"/>
-  <circle cx="16" cy="18" r="2.15" fill="#1A1622"/>
-  <circle cx="16" cy="7.6" r="1.45" fill="#3F2D78"/>
-</svg>
