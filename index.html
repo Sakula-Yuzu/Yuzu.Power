@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Yuzu.Power — 实时充放电功率</title>
+  <meta name="description" content="柚.Power 是 Sakula_小柚柚 开发的轻量安卓功率记录应用。同一屏查看功率、电压、电流和温度，自定义主界面，并用悬浮窗和会话曲线记下每一次充放电。" />
+  <meta name="theme-color" content="#110d18" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #110d18;
+      --surface: #221b2e;
+      --fg: #f5f1fb;
+      --muted: #b7abc8;
+      --accent: #d2c0ff;
+      --ink: #1a1224;
+      --line: color-mix(in srgb, var(--fg) 12%, transparent);
+      --sans: "Outfit", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--sans);
+      line-height: 1.55;
+    }
+    a { color: inherit; }
+    img { max-width: 100%; display: block; }
+    button, .btn, summary { cursor: pointer; }
+    .skip {
+      position: absolute;
+      left: 1rem;
+      top: -4rem;
+      background: var(--accent);
+      color: var(--ink);
+      padding: 0.5rem 1rem;
+      border-radius: 999px;
+    }
+    .skip:focus { top: 1rem; }
+    .wrap { width: min(1120px, calc(100% - 2rem)); margin-inline: auto; }
+    header.bar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: color-mix(in srgb, var(--bg) 86%, transparent);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line);
+    }
+    .bar-row, .nav-desk { display: flex; align-items: center; }
+    .bar-row { justify-content: space-between; gap: 1rem; padding: 0.75rem 0; }
+    .brand { display: flex; align-items: center; gap: 0.5rem; font-weight: 650; text-decoration: none; }
+    .brand svg { width: 2rem; height: 2rem; }
+    .nav-desk { gap: 1.4rem; }
+    .nav-desk a { color: var(--muted); text-decoration: none; font-size: 0.95rem; }
+    .nav-desk a:hover { color: var(--fg); }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 2.75rem;
+      padding: 0 1.1rem;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 650;
+      border: 1px solid transparent;
+    }
+    .btn-accent { background: var(--accent); color: var(--ink); }
+    .btn-ghost { border-color: var(--line); color: var(--fg); }
+    .btn-ink { background: var(--ink); color: var(--fg); }
+    .menu-btn {
+      display: none;
+      width: 2.75rem;
+      height: 2.75rem;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: transparent;
+      color: var(--fg);
+      font-size: 1.2rem;
+    }
+    .nav-mobile { display: none; border-top: 1px solid var(--line); padding-bottom: 0.5rem; }
+    .nav-mobile a { display: block; padding: 0.85rem 0; text-decoration: none; }
+    .hero { display: grid; gap: 2.5rem; align-items: center; padding: 3.2rem 0 2rem; }
+    .kicker { color: var(--accent); font-weight: 600; margin: 0; }
+    h1 { font-size: clamp(2.3rem, 6vw, 4.2rem); line-height: 1.12; letter-spacing: -0.03em; margin: 0.6rem 0 0; }
+    h2 { font-size: clamp(1.6rem, 3vw, 2rem); letter-spacing: -0.02em; margin: 0; }
+    .lead { color: var(--muted); font-size: 1.05rem; max-width: 38rem; }
+    .actions { display: flex; flex-wrap: wrap; gap: 0.7rem; margin-top: 1.4rem; }
+    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem; margin-top: 1.6rem; }
+    .stats dt { color: var(--muted); font-size: 0.85rem; }
+    .stats dd { margin: 0.2rem 0 0; font-size: 1.35rem; font-weight: 650; }
+    .device {
+      background: var(--bg);
+      border: 1px solid var(--line);
+      border-radius: 1.4rem;
+      padding: 0.75rem;
+      box-shadow: 0 24px 70px color-mix(in srgb, black 48%, transparent);
+    }
+    .screen {
+      background-color: var(--surface);
+      background-image:
+        linear-gradient(to right, color-mix(in srgb, var(--fg) 7%, transparent) 1px, transparent 1px),
+        linear-gradient(to bottom, color-mix(in srgb, var(--fg) 7%, transparent) 1px, transparent 1px);
+      background-size: 22px 22px;
+      border-radius: 1rem;
+      padding: 0.9rem;
+    }
+    .screen-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.7rem; }
+    .pill { background: var(--bg); color: var(--accent); border-radius: 999px; padding: 0.25rem 0.7rem; font-size: 0.78rem; }
+    .tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 0.45rem; }
+    .tile, .spark {
+      background: color-mix(in srgb, var(--bg) 82%, transparent);
+      border-radius: 1rem;
+      padding: 0.7rem 0.75rem;
+    }
+    .tile span, .spark span { color: var(--muted); font-size: 0.75rem; }
+    .tile strong { display: block; margin-top: 0.25rem; font-size: 1.05rem; font-variant-numeric: tabular-nums; }
+    .spark { margin-top: 0.45rem; }
+    .spark svg { width: 100%; height: 4rem; }
+    section.block { padding: 2.4rem 0; }
+    .cards { display: grid; gap: 0.75rem; margin-top: 1.2rem; }
+    article.card, .panel, .note, details, .shot figcaption { }
+    article.card, .panel, .note, .ver {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 1.25rem;
+      padding: 1.15rem 1.2rem;
+    }
+    article.card h3 { margin: 0.8rem 0 0; font-size: 1.05rem; }
+    article.card p, .muted, .panel p, .ver li, details p { color: var(--muted); }
+    .tag {
+      float: right;
+      background: var(--accent);
+      color: var(--ink);
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 0.15rem 0.5rem;
+    }
+    .chips { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-top: 0.8rem; padding: 0; list-style: none; }
+    .chips li { border: 1px solid var(--line); color: var(--muted); border-radius: 999px; padding: 0.4rem 0.75rem; font-size: 0.9rem; }
+    .rail { display: flex; gap: 0.9rem; overflow-x: auto; padding-bottom: 0.4rem; margin-top: 1.2rem; }
+    .shot { width: 13.2rem; flex: 0 0 auto; }
+    .shot button {
+      padding: 0;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      border-radius: 1.25rem;
+      overflow: hidden;
+      width: 100%;
+    }
+    .shot img { aspect-ratio: 9 / 16; object-fit: cover; object-position: top; width: 100%; }
+    .shot figcaption p { margin: 0.7rem 0 0; }
+    .shot figcaption .muted { margin-top: 0.25rem; font-size: 0.88rem; }
+    .split { display: grid; gap: 0.75rem; margin-top: 1.2rem; }
+    .big { font-size: 2.6rem; color: var(--accent); font-weight: 700; margin: 0; }
+    .vers { display: grid; gap: 0.7rem; margin-top: 1.2rem; padding: 0; list-style: none; }
+    .ver-head { display: flex; justify-content: space-between; gap: 1rem; align-items: baseline; }
+    .ver ul { margin: 0.6rem 0 0; padding-left: 1.1rem; }
+    .badge { margin-left: 0.4rem; background: var(--accent); color: var(--ink); border-radius: 999px; font-size: 0.72rem; padding: 0.1rem 0.45rem; }
+    .note { border-color: color-mix(in srgb, var(--accent) 45%, transparent); margin-top: 0.8rem; }
+    .download {
+      background: var(--accent);
+      color: var(--ink);
+      border-radius: 1.25rem;
+      padding: 1.6rem 1.3rem;
+    }
+    .download p { margin: 0.4rem 0 0; max-width: 40rem; }
+    .faq { margin-top: 1.2rem; border: 1px solid var(--line); border-radius: 1.25rem; overflow: hidden; }
+    details { border-bottom: 1px solid var(--line); padding: 0.2rem 1.1rem; }
+    details:last-child { border-bottom: 0; }
+    summary { min-height: 3rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; font-weight: 600; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    .credits { display: grid; gap: 0.9rem; margin-top: 1.2rem; }
+    .credits dt { color: var(--muted); font-size: 0.85rem; }
+    .credits dd { margin: 0.15rem 0 0; font-weight: 600; }
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 1.6rem 0 2.4rem;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+    .foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.8rem; }
+    .foot nav { display: flex; gap: 1rem; }
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: color-mix(in srgb, var(--bg) 84%, transparent);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      z-index: 40;
+    }
+    .lightbox.open { display: flex; }
+    .lightbox figure { margin: 0; max-width: 24rem; }
+    .lightbox img { max-height: 78vh; border-radius: 1.25rem; margin-inline: auto; }
+    .lb-row { display: flex; justify-content: space-between; gap: 0.8rem; align-items: flex-start; margin-top: 0.7rem; }
+    @media (min-width: 800px) {
+      .hero { grid-template-columns: 1.1fr 0.9fr; padding: 4.5rem 0 2rem; }
+      .cards, .split { grid-template-columns: 1fr 1fr; }
+      .cards { grid-template-columns: repeat(3, 1fr); }
+      .credits { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 799px) {
+      .nav-desk { display: none; }
+      .menu-btn { display: inline-flex; align-items: center; justify-content: center; }
+      .nav-mobile.open { display: block; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+    }
+  </style>
+</head>
+<body>
+  <!--
+    GitHub Pages：把本目录里的 index.html、favicon.svg、.nojekyll 和 shots/ 放到仓库根目录，
+    可与 README.md 共存。Settings → Pages → Branch: main / root。
+    资源使用相对路径，适用于 https://<user>.github.io/<仓库名>/ 。
+    .nojekyll 用来跳过 Jekyll，避免页面被改写。
+  -->
+  <a class="skip" href="#content">跳到内容</a>
+  <header class="bar">
+    <div class="wrap bar-row">
+      <a class="brand" href="#top">
+        <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#d2c0ff"/><path d="M9 18.2a7 7 0 1 1 14 0" fill="none" stroke="#1a1224" stroke-width="2.2" stroke-linecap="round"/><path d="M16 7.2v6.2" fill="none" stroke="#1a1224" stroke-width="2.2" stroke-linecap="round"/></svg>
+        Yuzu.Power
+      </a>
+      <nav class="nav-desk" aria-label="页内">
+        <a href="#features">特性</a>
+        <a href="#shots">界面</a>
+        <a href="#support">适配</a>
+        <a href="#versions">版本</a>
+        <a href="#faq">问答</a>
+      </nav>
+      <div class="bar-row" style="padding:0">
+        <a class="btn btn-accent" href="https://github.com/Sakula-Yuzu/Yuzu.Power/releases/download/%E6%AD%A3%E5%BC%8F%E7%89%881.9.0/Yuzu.Power_1.9.0_PL.apk">下载 1.9.0</a>
+        <button class="menu-btn" type="button" aria-expanded="false" aria-label="打开菜单">☰</button>
+      </div>
+    </div>
+    <nav class="nav-mobile wrap" aria-label="页内" hidden>
+      <a href="#features">特性</a>
+      <a href="#shots">界面</a>
+      <a href="#support">适配</a>
+      <a href="#versions">版本</a>
+      <a href="#faq">问答</a>
+    </nav>
+  </header>
+
+  <main id="content">
+    <section class="wrap hero" id="top">
+      <div>
+        <p class="kicker">正式版 1.9.0 · Android · 2026-11-04</p>
+        <h1>让充放，不再依赖功率计</h1>
+        <p class="lead">柚.Power 是哔哩哔哩 UP 主 Sakula_小柚柚 为数码爱好者做的轻量安卓应用。瞬时功率、电压、电流和温度在同一屏；把一次充放电记成看得见的曲线。</p>
+        <div class="actions">
+          <a class="btn btn-accent" href="#download">从 GitHub 安装</a>
+          <a class="btn btn-ghost" href="https://github.com/Sakula-Yuzu/Yuzu.Power">仓库</a>
+        </div>
+        <dl class="stats">
+          <div><dt>标注覆盖</dt><dd>98.6%</dd></div>
+          <div><dt>安装包</dt><dd>19.7 MB</dd></div>
+          <div><dt>系统</dt><dd>Android 12+</dd></div>
+        </dl>
+      </div>
+      <div class="device" aria-hidden="false">
+        <div class="screen">
+          <div class="screen-top">
+            <div>
+              <strong>Yuzu.Power</strong>
+              <div class="muted" style="font-size:0.78rem">Version 1.9.0</div>
+            </div>
+            <div class="pill" id="status">放电中</div>
+          </div>
+          <div class="tiles" id="tiles"></div>
+          <div class="spark">
+            <span>功率曲线 · 示意，不读取本机电池</span>
+            <svg id="spark" viewBox="0 0 100 32" aria-hidden="true"></svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap block" id="features">
+      <h2>主屏上能看见的，和记下来的</h2>
+      <div class="cards">
+        <article class="card"><h3>一屏读完</h3><p>瞬时功率、电压、电流和温度放在同一块主屏。电流单位自动识别 μA / mA，不对还能手动切。</p></article>
+        <article class="card"><h3>一次充放，一条曲线</h3><p>记下起止电量、峰值和平均功率、温度变化，以及这次为什么结束。</p></article>
+        <article class="card"><h3>主屏按你的习惯排</h3><p>组件可以加、可以删，尺寸和位置自己定。刷新率、循环次数、核心频率都能摆上来。</p></article>
+        <article class="card"><h3>悬浮窗跟着走</h3><p>展开和收起两种布局，深色浅色都能存成方案。看视频或跑分时不必来回切应用。</p></article>
+        <article class="card"><span class="tag">1.9.0</span><h3>功耗统计</h3><p>按应用拆开前台、后台、前台服务和缓存耗电，并给出区间占比。</p></article>
+        <article class="card"><span class="tag">测试</span><h3>应用冰箱</h3><p>用冷藏室和冷冻室管理后台进程，搜索应用名、包名或 UID。</p></article>
+      </div>
+      <ul class="chips">
+        <li>校准算法（1.9.0 再优化过）</li>
+        <li>处理器型号、频率与每核占用</li>
+        <li>部分温度需要 Shizuku</li>
+        <li>状态栏与灵动岛常驻</li>
+        <li>无电池设备也能看功率</li>
+        <li>OPPO 系电流单位单独适配</li>
+      </ul>
+    </section>
+
+    <section class="wrap block" id="shots">
+      <h2>界面</h2>
+      <p class="muted">点开看大图。截图来自正式版界面。</p>
+      <div class="rail" id="rail"></div>
+    </section>
+
+    <section class="wrap block" id="support">
+      <h2>机型</h2>
+      <div class="split">
+        <div class="panel">
+          <p class="big">98.6%</p>
+          <p>作者标注的主流机型支持率。中兴、努比亚、红魔上效果最好。</p>
+        </div>
+        <ul class="panel">
+          <li>OPPO 系电流单位做了单独适配。</li>
+          <li>没有电池的设备也可以查看功率。</li>
+          <li>部分异形屏仍可能显示不佳，欢迎反馈。</li>
+          <li>1.8.0 起需要 Android 12。更低版本请用 1.4.0。</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="wrap block" id="versions">
+      <div class="ver-head">
+        <h2>版本</h2>
+        <a href="https://github.com/Sakula-Yuzu/Yuzu.Power/releases">在 GitHub 查看全部发布</a>
+      </div>
+      <ol class="vers">
+        <li class="ver"><div class="ver-head"><strong>1.9.0 <span class="badge">当前</span></strong><time datetime="2026-11-04">2026-11-04</time></div><ul><li>优化校准算法和部分界面排版</li><li>新增应用冰箱（测试）与功耗统计</li><li>特别鸣谢迁到关于 → 更新与声明</li><li>隐藏后台迁到稳定运行</li></ul></li>
+        <li class="ver"><div class="ver-head"><strong>1.8.0</strong><time datetime="2026-10-31">2026-10-31</time></div><ul><li>架构重构，加入校准、CPU 信息、界面自定义和悬浮窗</li><li>最低系统改为 Android 12</li></ul></li>
+        <li class="ver"><div class="ver-head"><strong>1.4.0</strong><time datetime="2026-09-15">2026-09-15</time></div><ul><li>重构界面，加入软件优化。卡在优化界面时，清除本应用数据后再开</li></ul></li>
+        <li class="ver"><div class="ver-head"><strong>1.3.0</strong><time datetime="2026-09-01">2026-09-01</time></div><ul><li>优化部分异形屏，补充第三方灵动岛进度说明</li></ul></li>
+        <li class="ver"><div class="ver-head"><strong>1.2.0</strong><time datetime="2026-08-20">2026-08-20</time></div><ul><li>修复部分界面返回卡顿或黑屏，重排文字</li></ul></li>
+        <li class="ver"><div class="ver-head"><strong>1.0.0</strong><time datetime="2026-08-09">2026-08-09</time></div><ul><li>正式版。此前打磨了 34 个版本</li></ul></li>
+      </ol>
+      <aside class="note">
+        <strong>升级前先看这几句</strong>
+        <p class="muted">从 1.4.0 升级请备份数据，装完清除应用数据再重新导入。从 1.8.0 升到 1.9.0 后如果 Shizuku 失效，停掉服务再激活，建议用 AxManager。低于 Android 12 会闪退，请改用 1.4.0。</p>
+      </aside>
+    </section>
+
+    <section class="wrap block" id="download">
+      <div class="download">
+        <p><strong>Android · 正式版 1.9.0</strong></p>
+        <h2>从 GitHub 安装</h2>
+        <p>本页不托管文件。安装包在 Releases，文件名 Yuzu.Power_1.9.0_PL.apk，约 19.7 MB。安装前允许来自该来源的应用。</p>
+        <div class="actions">
+          <a class="btn btn-ink" href="https://github.com/Sakula-Yuzu/Yuzu.Power/releases/download/%E6%AD%A3%E5%BC%8F%E7%89%881.9.0/Yuzu.Power_1.9.0_PL.apk">下载 APK</a>
+          <a class="btn btn-ghost" href="https://github.com/Sakula-Yuzu/Yuzu.Power/releases" style="border-color: color-mix(in srgb, var(--ink) 25%, transparent)">全部版本</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap block" id="faq">
+      <h2>问答</h2>
+      <div class="faq">
+        <details><summary>这是 Switch 模拟器吗？ <span>+</span></summary><p>不是。Yuzu.Power 只记录手机的充放电功率。名字里的 Yuzu 来自作者的「柚」，和任天堂主机、游戏模拟器没有关系。</p></details>
+        <details><summary>哪些手机能用？ <span>+</span></summary><p>Android 应用。作者标注主流机型支持率 98.6%，中兴、努比亚、红魔上效果最好。OPPO 系的电流单位单独处理过，没有电池的设备也能看功率。部分异形屏仍可能显示不佳。1.8.0 及之后需要 Android 12 及以上；更低系统请装 1.4.0。</p></details>
+        <details><summary>温度为空？ <span>+</span></summary><p>CPU、NPU 和表面温度需要 Shizuku 授权。编辑组件时，应用会提示哪些数据依赖它。授权建议用 AxManager。从 1.8.0 升到 1.9.0 后如果授权失效，先停掉 Shizuku 再重新激活。</p></details>
+        <details><summary>功率单位看起来不对？ <span>+</span></summary><p>应用会自动识别电流单位。如果显示异常，到设置里手动切换 μA / mA。</p></details>
+        <details><summary>升级会丢记录吗？ <span>+</span></summary><p>从 1.4.0 升级请先备份，装完清除本应用数据，再进应用重新导入。1.8.0 也是重大重构，更新前同样建议备份充电数据。闪退时先确认系统是不是 Android 12 及以上。</p></details>
+        <details><summary>安装包从哪里下？ <span>+</span></summary><p>只从 GitHub Releases 下载。本页不托管 APK。当前文件是 Yuzu.Power_1.9.0_PL.apk，约 19.7 MB。</p></details>
+      </div>
+    </section>
+
+    <section class="wrap block" id="credits">
+      <h2>特别鸣谢</h2>
+      <p class="muted">排名不分先后。1.9.0 起这份名单也在应用的「关于 → 更新与声明」。</p>
+      <dl class="credits">
+        <div><dt>作者</dt><dd>Sakula_小柚柚</dd></div>
+        <div><dt>图标设计与制作</dt><dd>九烨</dd></div>
+        <div><dt>宣传</dt><dd>时葱葱呀zZ</dd></div>
+        <div><dt>资金援助</dt><dd>黑衣清衫、牙科么肆么_免费方式、嘉豪</dd></div>
+        <div><dt>测试</dt><dd>时葱葱呀zZ、Key、黑衣清衫、不是夕瓜我不吃、牙科么肆么_免费方式</dd></div>
+      </dl>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap foot">
+      <p>Yuzu.Power · Sakula_小柚柚。项目目前未指定开源许可证。</p>
+      <nav>
+        <a href="https://b23.tv/DTTEDLU">哔哩哔哩</a>
+        <a href="https://github.com/Sakula-Yuzu/Yuzu.Power">GitHub</a>
+        <a href="https://github.com/Sakula-Yuzu/Yuzu.Power/issues">反馈</a>
+      </nav>
+    </div>
+  </footer>
+
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="截图" hidden>
+    <figure>
+      <img id="lb-img" alt="" />
+      <div class="lb-row">
+        <div>
+          <strong id="lb-title"></strong>
+          <p class="muted" id="lb-cap"></p>
+        </div>
+        <button class="btn btn-ghost" type="button" id="lb-close">关闭</button>
+      </div>
+    </figure>
+  </div>
+
+  <script>
+    (function () {
+      var shots = [
+        ["shots/float.jpg", "主界面", "功率、温度、刷新率与处理器信息排在同一屏。"],
+        ["shots/custom.jpg", "组件自定义", "增删组件、调整尺寸。需要 Shizuku 的项会提前标明。"],
+        ["shots/session.jpg", "会话曲线", "一次放电的峰值、平均功率，以及电量和温度怎么走。"],
+        ["shots/cal.jpg", "悬浮窗", "展开与收起，深色或浅色，方案可以保存后再改。"],
+        ["shots/about.jpg", "校准", "校准过程里同时看功率、电流、电压和电荷量。"],
+        ["shots/stats.jpg", "功耗统计", "1.9.0：按应用看这段时间到底谁在耗电。"],
+        ["shots/fridge.jpg", "应用冰箱", "1.9.0 测试版：冷藏室、冷冻室，用来收后台。"],
+        ["shots/home.jpg", "关于", "版本、作者和鸣谢。1.9.0 起鸣谢在「更新与声明」。"]
+      ];
+      var rail = document.getElementById("rail");
+      var box = document.getElementById("lightbox");
+      shots.forEach(function (item) {
+        var fig = document.createElement("figure");
+        fig.className = "shot";
+        var btn = document.createElement("button");
+        btn.type = "button";
+        var img = document.createElement("img");
+        img.src = item[0];
+        img.alt = item[1];
+        btn.appendChild(img);
+        btn.addEventListener("click", function () { openShot(item); });
+        var cap = document.createElement("figcaption");
+        cap.innerHTML = "<p>" + item[1] + "</p><p class='muted'>" + item[2] + "</p>";
+        fig.appendChild(btn);
+        fig.appendChild(cap);
+        rail.appendChild(fig);
+      });
+      function openShot(item) {
+        document.getElementById("lb-img").src = item[0];
+        document.getElementById("lb-img").alt = item[1];
+        document.getElementById("lb-title").textContent = item[1];
+        document.getElementById("lb-cap").textContent = item[2];
+        box.hidden = false;
+        box.classList.add("open");
+      }
+      function closeShot() {
+        box.classList.remove("open");
+        box.hidden = true;
+      }
+      document.getElementById("lb-close").addEventListener("click", closeShot);
+      box.addEventListener("click", function (event) {
+        if (event.target === box) closeShot();
+      });
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") closeShot();
+      });
+
+      var menuBtn = document.querySelector(".menu-btn");
+      var mobile = document.querySelector(".nav-mobile");
+      menuBtn.addEventListener("click", function () {
+        var open = mobile.classList.toggle("open");
+        mobile.hidden = !open;
+        menuBtn.setAttribute("aria-expanded", open ? "true" : "false");
+        menuBtn.setAttribute("aria-label", open ? "关闭菜单" : "打开菜单");
+        menuBtn.textContent = open ? "×" : "☰";
+      });
+      mobile.querySelectorAll("a").forEach(function (link) {
+        link.addEventListener("click", function () {
+          mobile.classList.remove("open");
+          mobile.hidden = true;
+          menuBtn.setAttribute("aria-expanded", "false");
+          menuBtn.textContent = "☰";
+        });
+      });
+
+      var labels = ["瞬时功率", "电池电流", "电池电压", "电池温度", "NPU 温度", "CPU 占用"];
+      var tiles = document.getElementById("tiles");
+      var nodes = labels.map(function (label) {
+        var div = document.createElement("div");
+        div.className = "tile";
+        div.innerHTML = "<span>" + label + "</span><strong>0</strong>";
+        tiles.appendChild(div);
+        return div.querySelector("strong");
+      });
+      var history = [-2.1, -2.8, -3.4, -4.6, -3.1, -2.9, -3.8, -4.2, -3.5, -3.1, -4.4, -3.6];
+      var spark = document.getElementById("spark");
+      function draw() {
+        var min = Math.min.apply(null, history.concat([-8]));
+        var max = Math.max.apply(null, history.concat([8]));
+        var span = max - min || 1;
+        var d = history.map(function (v, i) {
+          var x = (i / Math.max(history.length - 1, 1)) * 100;
+          var y = 28 - ((v - min) / span) * 24;
+          return (i === 0 ? "M" : "L") + x.toFixed(2) + " " + y.toFixed(2);
+        }).join(" ");
+        spark.innerHTML = "<path d='" + d + "' fill='none' stroke='#d2c0ff' stroke-width='1.6'/>";
+      }
+      function fmt(n, digits) {
+        return (n > 0 ? "+" : "") + n.toFixed(digits);
+      }
+      function paint(t) {
+        var charging = Math.floor(t / 14) % 2 === 1;
+        var wobble = Math.sin(t * 1.25) * 0.42 + Math.sin(t * 0.33) * 0.9;
+        var power = charging ? 11.4 + wobble * 3.2 : -3.1 + wobble * 2.1;
+        var voltage = charging ? 4.28 + Math.sin(t * 0.2) * 0.04 : 4.02 + Math.sin(t * 0.18) * 0.06;
+        history.push(power);
+        history = history.slice(-28);
+        nodes[0].textContent = fmt(power, 2) + " W";
+        nodes[1].textContent = fmt(power / voltage, 2) + " A";
+        nodes[2].textContent = voltage.toFixed(2) + " V";
+        nodes[3].textContent = (36.1 + Math.sin(t * 0.22) * 0.7 + (charging ? 0.8 : 0)).toFixed(1) + " °C";
+        nodes[4].textContent = (44 + Math.sin(t * 0.55) * 3.2).toFixed(1) + " °C";
+        nodes[5].textContent = (16 + Math.abs(Math.sin(t * 0.8)) * 28).toFixed(0) + "%";
+        document.getElementById("status").textContent = charging ? "充电中" : "放电中";
+        draw();
+      }
+      var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      paint(2.4);
+      if (!reduce) {
+        var start = performance.now();
+        setInterval(function () { paint((performance.now() - start) / 1000); }, 180);
+      }
+    })();
+  </script>
+</body>
+</html>
