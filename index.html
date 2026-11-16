@@ -3,527 +3,1045 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Yuzu.Power — 实时充放电功率</title>
-  <meta name="description" content="柚.Power 是 Sakula_小柚柚 开发的轻量安卓功率记录应用。同一屏查看功率、电压、电流和温度，自定义主界面，并用悬浮窗和会话曲线记下每一次充放电。" />
-  <meta name="theme-color" content="#110d18" />
-  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <title>Yuzu.Power — 充放电功率监测</title>
+  <meta name="description" content="Yuzu.Power 是面向 Android 的轻量级充放电功率监测应用。实时读取功率、电压、电流与温度，并保存为可回看的会话与曲线。正式版 2.0.0。" />
+  <meta name="theme-color" content="#0b0910" />
+  <meta property="og:title" content="Yuzu.Power — 充放电功率监测" />
+  <meta property="og:description" content="Yuzu.Power 是面向 Android 的轻量级充放电功率监测应用。实时读取功率、电压、电流与温度，并保存为可回看的会话与曲线。正式版 2.0.0。" />
+  <meta property="og:image" content="og.jpg" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet" />
   <style>
-    :root {
-      --bg: #110d18;
-      --surface: #221b2e;
-      --fg: #f5f1fb;
-      --muted: #b7abc8;
-      --accent: #d2c0ff;
-      --ink: #1a1224;
-      --line: color-mix(in srgb, var(--fg) 12%, transparent);
-      --sans: "Outfit", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
-    }
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--fg);
-      font-family: var(--sans);
-      line-height: 1.55;
-    }
-    a { color: inherit; }
-    img { max-width: 100%; display: block; }
-    button, .btn, summary { cursor: pointer; }
-    .skip {
-      position: absolute;
-      left: 1rem;
-      top: -4rem;
-      background: var(--accent);
-      color: var(--ink);
-      padding: 0.5rem 1rem;
-      border-radius: 999px;
-    }
-    .skip:focus { top: 1rem; }
-    .wrap { width: min(1120px, calc(100% - 2rem)); margin-inline: auto; }
-    header.bar {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      background: color-mix(in srgb, var(--bg) 86%, transparent);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--line);
-    }
-    .bar-row, .nav-desk { display: flex; align-items: center; }
-    .bar-row { justify-content: space-between; gap: 1rem; padding: 0.75rem 0; }
-    .brand { display: flex; align-items: center; gap: 0.5rem; font-weight: 650; text-decoration: none; }
-    .brand svg { width: 2rem; height: 2rem; }
-    .nav-desk { gap: 1.4rem; }
-    .nav-desk a { color: var(--muted); text-decoration: none; font-size: 0.95rem; }
-    .nav-desk a:hover { color: var(--fg); }
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 2.75rem;
-      padding: 0 1.1rem;
-      border-radius: 999px;
-      text-decoration: none;
-      font-weight: 650;
-      border: 1px solid transparent;
-    }
-    .btn-accent { background: var(--accent); color: var(--ink); }
-    .btn-ghost { border-color: var(--line); color: var(--fg); }
-    .btn-ink { background: var(--ink); color: var(--fg); }
-    .menu-btn {
-      display: none;
-      width: 2.75rem;
-      height: 2.75rem;
-      border-radius: 999px;
-      border: 1px solid var(--line);
-      background: transparent;
-      color: var(--fg);
-      font-size: 1.2rem;
-    }
-    .nav-mobile { display: none; border-top: 1px solid var(--line); padding-bottom: 0.5rem; }
-    .nav-mobile a { display: block; padding: 0.85rem 0; text-decoration: none; }
-    .hero { display: grid; gap: 2.5rem; align-items: center; padding: 3.2rem 0 2rem; }
-    .kicker { color: var(--accent); font-weight: 600; margin: 0; }
-    h1 { font-size: clamp(2.3rem, 6vw, 4.2rem); line-height: 1.12; letter-spacing: -0.03em; margin: 0.6rem 0 0; }
-    h2 { font-size: clamp(1.6rem, 3vw, 2rem); letter-spacing: -0.02em; margin: 0; }
-    .lead { color: var(--muted); font-size: 1.05rem; max-width: 38rem; }
-    .actions { display: flex; flex-wrap: wrap; gap: 0.7rem; margin-top: 1.4rem; }
-    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem; margin-top: 1.6rem; }
-    .stats dt { color: var(--muted); font-size: 0.85rem; }
-    .stats dd { margin: 0.2rem 0 0; font-size: 1.35rem; font-weight: 650; }
-    .device {
-      background: var(--bg);
-      border: 1px solid var(--line);
-      border-radius: 1.4rem;
-      padding: 0.75rem;
-      box-shadow: 0 24px 70px color-mix(in srgb, black 48%, transparent);
-    }
-    .screen {
-      background-color: var(--surface);
-      background-image:
-        linear-gradient(to right, color-mix(in srgb, var(--fg) 7%, transparent) 1px, transparent 1px),
-        linear-gradient(to bottom, color-mix(in srgb, var(--fg) 7%, transparent) 1px, transparent 1px);
-      background-size: 22px 22px;
-      border-radius: 1rem;
-      padding: 0.9rem;
-    }
-    .screen-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.7rem; }
-    .pill { background: var(--bg); color: var(--accent); border-radius: 999px; padding: 0.25rem 0.7rem; font-size: 0.78rem; }
-    .tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 0.45rem; }
-    .tile, .spark {
-      background: color-mix(in srgb, var(--bg) 82%, transparent);
-      border-radius: 1rem;
-      padding: 0.7rem 0.75rem;
-    }
-    .tile span, .spark span { color: var(--muted); font-size: 0.75rem; }
-    .tile strong { display: block; margin-top: 0.25rem; font-size: 1.05rem; font-variant-numeric: tabular-nums; }
-    .spark { margin-top: 0.45rem; }
-    .spark svg { width: 100%; height: 4rem; }
-    section.block { padding: 2.4rem 0; }
-    .cards { display: grid; gap: 0.75rem; margin-top: 1.2rem; }
-    article.card, .panel, .note, details, .shot figcaption { }
-    article.card, .panel, .note, .ver {
-      background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: 1.25rem;
-      padding: 1.15rem 1.2rem;
-    }
-    article.card h3 { margin: 0.8rem 0 0; font-size: 1.05rem; }
-    article.card p, .muted, .panel p, .ver li, details p { color: var(--muted); }
-    .tag {
-      float: right;
-      background: var(--accent);
-      color: var(--ink);
-      border-radius: 999px;
-      font-size: 0.72rem;
-      font-weight: 700;
-      padding: 0.15rem 0.5rem;
-    }
-    .chips { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-top: 0.8rem; padding: 0; list-style: none; }
-    .chips li { border: 1px solid var(--line); color: var(--muted); border-radius: 999px; padding: 0.4rem 0.75rem; font-size: 0.9rem; }
-    .rail { display: flex; gap: 0.9rem; overflow-x: auto; padding-bottom: 0.4rem; margin-top: 1.2rem; }
-    .shot { width: 13.2rem; flex: 0 0 auto; }
-    .shot button {
-      padding: 0;
-      border: 1px solid var(--line);
-      background: var(--surface);
-      border-radius: 1.25rem;
-      overflow: hidden;
-      width: 100%;
-    }
-    .shot img { aspect-ratio: 9 / 16; object-fit: cover; object-position: top; width: 100%; }
-    .shot figcaption p { margin: 0.7rem 0 0; }
-    .shot figcaption .muted { margin-top: 0.25rem; font-size: 0.88rem; }
-    .split { display: grid; gap: 0.75rem; margin-top: 1.2rem; }
-    .big { font-size: 2.6rem; color: var(--accent); font-weight: 700; margin: 0; }
-    .vers { display: grid; gap: 0.7rem; margin-top: 1.2rem; padding: 0; list-style: none; }
-    .ver-head { display: flex; justify-content: space-between; gap: 1rem; align-items: baseline; }
-    .ver ul { margin: 0.6rem 0 0; padding-left: 1.1rem; }
-    .badge { margin-left: 0.4rem; background: var(--accent); color: var(--ink); border-radius: 999px; font-size: 0.72rem; padding: 0.1rem 0.45rem; }
-    .note { border-color: color-mix(in srgb, var(--accent) 45%, transparent); margin-top: 0.8rem; }
-    .download {
-      background: var(--accent);
-      color: var(--ink);
-      border-radius: 1.25rem;
-      padding: 1.6rem 1.3rem;
-    }
-    .download p { margin: 0.4rem 0 0; max-width: 40rem; }
-    .faq { margin-top: 1.2rem; border: 1px solid var(--line); border-radius: 1.25rem; overflow: hidden; }
-    details { border-bottom: 1px solid var(--line); padding: 0.2rem 1.1rem; }
-    details:last-child { border-bottom: 0; }
-    summary { min-height: 3rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; font-weight: 600; list-style: none; }
-    summary::-webkit-details-marker { display: none; }
-    .credits { display: grid; gap: 0.9rem; margin-top: 1.2rem; }
-    .credits dt { color: var(--muted); font-size: 0.85rem; }
-    .credits dd { margin: 0.15rem 0 0; font-weight: 600; }
-    footer {
-      border-top: 1px solid var(--line);
-      padding: 1.6rem 0 2.4rem;
-      color: var(--muted);
-      font-size: 0.92rem;
-    }
-    .foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.8rem; }
-    .foot nav { display: flex; gap: 1rem; }
-    .lightbox {
-      position: fixed;
-      inset: 0;
-      background: color-mix(in srgb, var(--bg) 84%, transparent);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
-      z-index: 40;
-    }
-    .lightbox.open { display: flex; }
-    .lightbox figure { margin: 0; max-width: 24rem; }
-    .lightbox img { max-height: 78vh; border-radius: 1.25rem; margin-inline: auto; }
-    .lb-row { display: flex; justify-content: space-between; gap: 0.8rem; align-items: flex-start; margin-top: 0.7rem; }
-    @media (min-width: 800px) {
-      .hero { grid-template-columns: 1.1fr 0.9fr; padding: 4.5rem 0 2rem; }
-      .cards, .split { grid-template-columns: 1fr 1fr; }
-      .cards { grid-template-columns: repeat(3, 1fr); }
-      .credits { grid-template-columns: 1fr 1fr; }
-    }
-    @media (max-width: 799px) {
-      .nav-desk { display: none; }
-      .menu-btn { display: inline-flex; align-items: center; justify-content: center; }
-      .nav-mobile.open { display: block; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      html { scroll-behavior: auto; }
-    }
+:root {
+  --font-sans: "Noto Sans SC", "PingFang SC", "HarmonyOS Sans SC", "Microsoft YaHei", "WenQuanYi Zen Hei", sans-serif;
+  --color-bg: #0b0910;
+  --color-raise: #14111b;
+  --color-ink: #f5f2fb;
+  --color-muted: #b7adc8;
+  --color-faint: #8d849f;
+  --color-accent: #cbb6ff;
+  --color-on-accent: #171322;
+  --color-line: #ffffff1f;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  background: var(--color-bg);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(900px 420px at 50% -10%, #cbb6ff14, transparent 60%),
+    var(--color-bg);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  overflow-x: clip;
+}
+
+button:not(:disabled), [role="button"]:not(:disabled) { cursor: pointer; }
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: #cbb6ff55;
+  color: var(--color-ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+.shell {
+  width: min(1120px, calc(100% - 2.5rem));
+  margin-inline: auto;
+}
+
+.skip {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  z-index: 80;
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  padding: 0.6rem 1rem;
+  border-radius: 999px;
+  text-decoration: none;
+}
+.skip:focus { top: 1rem; }
+
+.header {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 50;
+  height: 4rem;
+  border-bottom: 1px solid transparent;
+  transition: background 0.25s ease, border-color 0.25s ease, backdrop-filter 0.25s ease;
+}
+.header.is-solid {
+  background: #0b0910cc;
+  border-bottom-color: var(--color-line);
+  backdrop-filter: blur(18px);
+}
+.header-inner {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  color: var(--color-ink);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+}
+.mark {
+  width: 1.85rem;
+  height: 1.85rem;
+  display: grid;
+  place-items: center;
+  border-radius: 0.55rem;
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  font-size: 0.95rem;
+}
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 1.35rem;
+  margin-left: auto;
+}
+.nav a {
+  color: var(--color-muted);
+  text-decoration: none;
+  font-size: 0.92rem;
+}
+.nav a:hover,
+.nav a[aria-current="true"] {
+  color: var(--color-ink);
+}
+.nav-cta {
+  min-height: 2.5rem;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 0.95rem;
+  border-radius: 999px;
+  background: var(--color-accent);
+  color: var(--color-on-accent) !important;
+  font-weight: 500;
+}
+.menu-btn {
+  display: none;
+  margin-left: auto;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid var(--color-line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-ink);
+  align-items: center;
+  justify-content: center;
+}
+
+.hero {
+  padding: 7.5rem 0 4.5rem;
+  text-align: center;
+}
+.eyebrow {
+  color: var(--color-accent);
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+}
+.display {
+  margin: 1rem 0 0;
+  font-size: clamp(2.7rem, 7vw, 5.6rem);
+  line-height: 1.05;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+.lede {
+  max-width: 40rem;
+  margin: 1.35rem auto 0;
+  color: var(--color-muted);
+  font-size: 1.05rem;
+  line-height: 1.8;
+  text-wrap: pretty;
+}
+.hero-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.75rem;
+}
+.btn {
+  min-height: 3rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0 1.25rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn-primary {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  box-shadow: 0 10px 30px #cbb6ff33;
+}
+.btn-ghost {
+  background: transparent;
+  color: var(--color-ink);
+  border-color: #ffffff2e;
+}
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin-top: 2.75rem;
+  border-top: 1px solid var(--color-line);
+  border-bottom: 1px solid var(--color-line);
+  text-align: left;
+}
+.stats div { padding: 1.15rem 1rem 1.15rem 0; }
+.stats div + div {
+  padding-left: 1rem;
+  border-left: 1px solid var(--color-line);
+}
+.stats dt {
+  color: var(--color-faint);
+  font-size: 0.78rem;
+}
+.stats dd {
+  margin: 0.25rem 0 0;
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+.stage {
+  margin-top: 3rem;
+  display: flex;
+  justify-content: center;
+}
+.device {
+  width: min(320px, 78vw);
+  padding: 0.45rem;
+  border-radius: 2rem;
+  background: linear-gradient(180deg, #2a2436, #121018);
+  border: 1px solid #ffffff24;
+  box-shadow: 0 40px 90px #00000073;
+}
+.device img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 1.6rem;
+  background: #100e16;
+}
+.caption {
+  margin-top: 0.85rem;
+  color: var(--color-faint);
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.section { padding: 5.5rem 0; }
+.section-alt {
+  background: linear-gradient(180deg, transparent, #ffffff06 18%, transparent);
+}
+.split {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 1.5rem 3.5rem;
+  align-items: end;
+  margin-bottom: 2.25rem;
+}
+.section h2 {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 3.35rem);
+  line-height: 1.12;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+.section .aside {
+  margin: 0;
+  color: var(--color-muted);
+  line-height: 1.75;
+  text-wrap: pretty;
+}
+.section .aside a { color: var(--color-accent); }
+
+.gallery {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 0.4rem;
+  scrollbar-width: thin;
+}
+.shot {
+  flex: 0 0 16rem;
+  scroll-snap-align: start;
+  text-align: left;
+  background: transparent;
+  border: 0;
+  color: inherit;
+  padding: 0;
+}
+.shot .device { width: 100%; }
+.shot strong {
+  display: block;
+  margin-top: 0.85rem;
+  font-size: 0.95rem;
+}
+.shot span {
+  display: block;
+  margin-top: 0.25rem;
+  color: var(--color-faint);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.features {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 3.5rem;
+}
+.feature {
+  padding: 1.35rem 0 1.2rem;
+  border-top: 1px solid var(--color-line);
+}
+.feature small {
+  color: var(--color-accent);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+}
+.feature h3 {
+  margin: 0.3rem 0 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+.feature p {
+  margin: 0.45rem 0 0;
+  color: var(--color-muted);
+  text-wrap: pretty;
+}
+
+.support {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: 2rem 3rem;
+  align-items: start;
+}
+.figure { margin: 0; padding-top: 0.4rem; }
+.figure b {
+  display: block;
+  font-size: clamp(4rem, 8vw, 6.5rem);
+  line-height: 0.9;
+  letter-spacing: -0.05em;
+  font-variant-numeric: tabular-nums;
+}
+.figure span {
+  display: block;
+  margin-top: 0.8rem;
+  color: var(--color-muted);
+  max-width: 18rem;
+}
+.notes {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.notes li {
+  padding: 1rem 0;
+  border-top: 1px solid var(--color-line);
+  color: var(--color-muted);
+}
+.notes strong {
+  color: var(--color-ink);
+  font-weight: 500;
+}
+
+.versions { display: grid; }
+.ver {
+  display: grid;
+  grid-template-columns: 6.5rem 7.5rem 1fr;
+  gap: 0.75rem 1.25rem;
+  padding: 1.15rem 0;
+  border-top: 1px solid var(--color-line);
+}
+.ver b { font-variant-numeric: tabular-nums; }
+.ver time {
+  color: var(--color-faint);
+  font-variant-numeric: tabular-nums;
+}
+.ver p {
+  margin: 0;
+  color: var(--color-muted);
+}
+.current {
+  color: var(--color-accent);
+  font-size: 0.75rem;
+  margin-left: 0.4rem;
+  font-weight: 500;
+}
+
+.download {
+  padding: 5.5rem 0;
+  background:
+    radial-gradient(620px 240px at 50% 0%, #cbb6ff22, transparent 70%),
+    var(--color-raise);
+  border-top: 1px solid var(--color-line);
+  border-bottom: 1px solid var(--color-line);
+}
+.download h2 {
+  margin: 0.6rem 0 0;
+  font-size: clamp(2.2rem, 5vw, 4rem);
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+.meta {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-top: 2rem;
+}
+.meta div {
+  padding: 1rem 0;
+  border-top: 1px solid var(--color-line);
+}
+.meta small {
+  display: block;
+  color: var(--color-faint);
+  font-size: 0.78rem;
+}
+.meta strong {
+  display: block;
+  margin-top: 0.3rem;
+  font-size: 1.05rem;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+.caution {
+  margin-top: 1.75rem;
+  color: var(--color-muted);
+  max-width: 46rem;
+}
+.caution li + li { margin-top: 0.35rem; }
+
+.faq details {
+  border-top: 1px solid var(--color-line);
+}
+.faq details:last-child {
+  border-bottom: 1px solid var(--color-line);
+}
+.faq summary {
+  min-height: 3.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.9rem 0;
+  cursor: pointer;
+  list-style: none;
+  font-weight: 500;
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary span {
+  color: var(--color-faint);
+  font-weight: 400;
+  font-size: 1.25rem;
+  line-height: 1;
+}
+.faq details[open] summary span { color: var(--color-accent); }
+.faq details p {
+  margin: 0;
+  padding: 0 0 1.1rem;
+  max-width: 46rem;
+  color: var(--color-muted);
+  text-wrap: pretty;
+}
+
+.credits-intro {
+  margin-top: 0.8rem;
+  margin-bottom: 1.5rem;
+  color: var(--color-muted);
+}
+.credits {
+  display: grid;
+  grid-template-columns: 8rem 1fr;
+  gap: 0.35rem 1rem;
+}
+.credits dt { color: var(--color-faint); }
+.credits dd { margin: 0; color: var(--color-muted); }
+
+.footer { padding: 3rem 0 2.5rem; }
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap: 2rem;
+}
+.footer p {
+  color: var(--color-muted);
+  max-width: 22rem;
+}
+.footer a {
+  color: var(--color-muted);
+  text-decoration: none;
+}
+.footer a:hover { color: var(--color-ink); }
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+.footer-links strong {
+  color: var(--color-ink);
+  margin-bottom: 0.35rem;
+}
+.legal {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-line);
+  color: var(--color-faint);
+  font-size: 0.82rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.dots {
+  position: fixed;
+  z-index: 40;
+  right: 1.1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+.dots a {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 99px;
+  background: #ffffff47;
+  position: relative;
+  text-decoration: none;
+}
+.dots a[aria-current="true"] {
+  background: var(--color-accent);
+  height: 1.15rem;
+}
+.dots a span {
+  position: absolute;
+  right: 0.9rem;
+  top: 50%;
+  transform: translateY(-50%);
+  white-space: nowrap;
+  color: var(--color-faint);
+  font-size: 0.75rem;
+  opacity: 0;
+  pointer-events: none;
+}
+.dots a:hover span,
+.dots a:focus-visible span { opacity: 1; }
+
+dialog.lightbox {
+  margin: auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-ink);
+  max-width: min(440px, calc(100vw - 2rem));
+  width: 100%;
+}
+dialog.lightbox::backdrop { background: #05040acc; }
+.lightbox-card {
+  background: var(--color-raise);
+  border: 1px solid var(--color-line);
+  border-radius: 1.25rem;
+  padding: 0.75rem;
+}
+.lightbox-card img {
+  width: 100%;
+  height: auto;
+  max-height: 74vh;
+  object-fit: contain;
+  border-radius: 0.9rem;
+  background: #100e16;
+}
+.lightbox-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 0.25rem 0.2rem;
+}
+.lightbox-bar p { margin: 0; }
+.lightbox-bar strong { display: block; }
+.lightbox-bar span {
+  color: var(--color-faint);
+  font-size: 0.82rem;
+}
+.lightbox-actions { display: flex; gap: 0.4rem; }
+.icon-btn {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 999px;
+  border: 1px solid var(--color-line);
+  background: transparent;
+  color: var(--color-ink);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 860px) {
+  .menu-btn { display: inline-flex; }
+  .nav { display: none; }
+  .nav.is-open {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    position: fixed;
+    inset: 4rem 0 0;
+    margin: 0;
+    padding: 1.25rem 1.25rem 2rem;
+    background: #0b0910f5;
+    gap: 0.35rem;
+  }
+  .nav.is-open a {
+    min-height: 2.75rem;
+    display: flex;
+    align-items: center;
+    font-size: 1.05rem;
+  }
+  .stats, .meta, .split, .features, .support, .footer-grid, .ver {
+    grid-template-columns: 1fr;
+  }
+  .stats div + div {
+    border-left: 0;
+    padding-left: 0;
+  }
+  .dots { display: none; }
+  .credits {
+    grid-template-columns: 1fr;
+    gap: 0.15rem 0;
+  }
+  .credits dd { margin-bottom: 0.8rem; }
+}
+
+@media (max-width: 640px) {
+  .stats { grid-template-columns: 1fr 1fr; }
+  .meta { grid-template-columns: 1fr 1fr; }
+  .hero { padding-top: 6.5rem; }
+}
   </style>
 </head>
 <body>
-  <!--
-    GitHub Pages：把本目录里的 index.html、favicon.svg、.nojekyll 和 shots/ 放到仓库根目录，
-    可与 README.md 共存。Settings → Pages → Branch: main / root。
-    资源使用相对路径，适用于 https://<user>.github.io/<仓库名>/ 。
-    .nojekyll 用来跳过 Jekyll，避免页面被改写。
-  -->
-  <a class="skip" href="#content">跳到内容</a>
-  <header class="bar">
-    <div class="wrap bar-row">
-      <a class="brand" href="#top">
-        <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#d2c0ff"/><path d="M9 18.2a7 7 0 1 1 14 0" fill="none" stroke="#1a1224" stroke-width="2.2" stroke-linecap="round"/><path d="M16 7.2v6.2" fill="none" stroke="#1a1224" stroke-width="2.2" stroke-linecap="round"/></svg>
+  <a class="skip" href="#top">跳到正文</a>
+
+  <header class="header" id="site-header">
+    <div class="shell header-inner">
+      <a class="brand" href="#top" id="brand-link">
+        <span class="mark" aria-hidden="true">Y</span>
         Yuzu.Power
       </a>
-      <nav class="nav-desk" aria-label="页内">
-        <a href="#features">特性</a>
-        <a href="#shots">界面</a>
-        <a href="#support">适配</a>
-        <a href="#versions">版本</a>
-        <a href="#faq">问答</a>
+      <button class="menu-btn" type="button" id="menu-btn" aria-label="打开导航" aria-expanded="false">
+        <svg id="icon-menu" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+        <svg id="icon-close" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:none"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+      <nav class="nav" id="main-nav" aria-label="主导航">
+        <a href="#interface" data-nav>界面</a>
+        <a href="#capabilities" data-nav>能力</a>
+        <a href="#devices" data-nav>适配</a>
+        <a href="#versions" data-nav>版本</a>
+        <a href="#faq" data-nav>问答</a>
+        <a class="nav-cta" href="#download" data-nav>下载</a>
       </nav>
-      <div class="bar-row" style="padding:0">
-        <a class="btn btn-accent" href="https://github.com/Sakula-Yuzu/Yuzu.Power/releases/download/%E6%AD%A3%E5%BC%8F%E7%89%881.9.0/Yuzu.Power_1.9.0_PL.apk">下载 1.9.0</a>
-        <button class="menu-btn" type="button" aria-expanded="false" aria-label="打开菜单">☰</button>
-      </div>
     </div>
-    <nav class="nav-mobile wrap" aria-label="页内" hidden>
-      <a href="#features">特性</a>
-      <a href="#shots">界面</a>
-      <a href="#support">适配</a>
-      <a href="#versions">版本</a>
-      <a href="#faq">问答</a>
-    </nav>
   </header>
 
-  <main id="content">
-    <section class="wrap hero" id="top">
-      <div>
-        <p class="kicker">正式版 1.9.0 · Android · 2026-11-04</p>
-        <h1>让充放，不再依赖功率计</h1>
-        <p class="lead">柚.Power 是哔哩哔哩 UP 主 Sakula_小柚柚 为数码爱好者做的轻量安卓应用。瞬时功率、电压、电流和温度在同一屏；把一次充放电记成看得见的曲线。</p>
-        <div class="actions">
-          <a class="btn btn-accent" href="#download">从 GitHub 安装</a>
-          <a class="btn btn-ghost" href="https://github.com/Sakula-Yuzu/Yuzu.Power">仓库</a>
-        </div>
-        <dl class="stats">
-          <div><dt>标注覆盖</dt><dd>98.6%</dd></div>
-          <div><dt>安装包</dt><dd>19.7 MB</dd></div>
-          <div><dt>系统</dt><dd>Android 12+</dd></div>
-        </dl>
+  <main id="top">
+    <section class="hero shell" aria-labelledby="hero-title">
+      <p class="eyebrow">正式版 2.0.0 · Android</p>
+      <h1 id="hero-title" class="display">实时读取功率。<br />完整保留会话。</h1>
+      <p class="lede">Yuzu.Power 是一款轻量级 Android 应用，用于监测设备的充放电功率。瞬时功率、电压、电流与温度置于同一界面；每一次充放电，均可保存为曲线与会话记录。</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="https://github.com/Sakula-Yuzu/Yuzu.Power/releases/download/%E6%AD%A3%E5%BC%8F%E7%89%882.0.0/Yuzu.Power2.0.0-PL.apk">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+          获取正式版 2.0.0
+        </a>
+        <a class="btn btn-ghost" href="https://github.com/Sakula-Yuzu/Yuzu.Power" target="_blank" rel="noreferrer">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+          查看仓库
+        </a>
       </div>
-      <div class="device" aria-hidden="false">
-        <div class="screen">
-          <div class="screen-top">
-            <div>
-              <strong>Yuzu.Power</strong>
-              <div class="muted" style="font-size:0.78rem">Version 1.9.0</div>
-            </div>
-            <div class="pill" id="status">放电中</div>
+      <dl class="stats">
+        <div><dt>标注覆盖</dt><dd>98.6%</dd></div>
+        <div><dt>系统要求</dt><dd>Android 12+</dd></div>
+        <div><dt>安装包</dt><dd>20.6 MB</dd></div>
+        <div><dt>当前版本</dt><dd>2.0.0</dd></div>
+      </dl>
+      <div class="stage">
+        <figure>
+          <div class="device">
+            <img src="shots/network.jpg" alt="Yuzu.Power 2.0.0 主界面，显示放电状态、连接信息、本次放电与功率曲线" width="1080" height="2400" />
           </div>
-          <div class="tiles" id="tiles"></div>
-          <div class="spark">
-            <span>功率曲线 · 示意，不读取本机电池</span>
-            <svg id="spark" viewBox="0 0 100 32" aria-hidden="true"></svg>
-          </div>
+          <figcaption class="caption">正式版 2.0.0 主界面。截图不读取本机电池。</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="interface">
+      <div class="shell">
+        <div class="split">
+          <h2>信息完整，<br />层次清楚。</h2>
+          <p class="aside">主屏同时容纳实时读数与本次会话。组件可以按使用习惯增减；悬浮窗则把常用数据留在其他应用之上。以下截图来自正式版界面。</p>
+        </div>
+        <div class="gallery" tabindex="0" aria-label="界面截图，可横向滑动">
+          <button class="shot" type="button" data-shot="0">
+            <span class="device"><img src="shots/network.jpg" alt="" width="840" height="1867" /></span>
+            <strong>主界面</strong>
+            <span>正式版 2.0.0。功率、连接信息与本次放电置于同一主屏。</span>
+          </button>
+          <button class="shot" type="button" data-shot="1">
+            <span class="device"><img src="shots/session.jpg" alt="" width="840" height="1867" /></span>
+            <strong>会话详情</strong>
+            <span>起止电量、峰值、平均功率与温度，以及对应曲线。</span>
+          </button>
+          <button class="shot" type="button" data-shot="2">
+            <span class="device"><img src="shots/float.jpg" alt="" width="840" height="1867" /></span>
+            <strong>悬浮窗</strong>
+            <span>展开与收起两种布局，深色与浅色方案均可保存。</span>
+          </button>
+          <button class="shot" type="button" data-shot="3">
+            <span class="device"><img src="shots/focus.jpg" alt="" width="840" height="1867" /></span>
+            <strong>应用冰箱</strong>
+            <span>公测功能。冷藏、冷冻与自律空间用于管理后台进程。</span>
+          </button>
+          <button class="shot" type="button" data-shot="4">
+            <span class="device"><img src="shots/guard.jpg" alt="" width="840" height="1867" /></span>
+            <strong>稳定运行</strong>
+            <span>Shizuku 连接、监控守护与后台采样相关设置。</span>
+          </button>
+        </div>
+        <p class="caption">向右滑动，可继续查看悬浮窗、应用冰箱与稳定运行。</p>
+      </div>
+    </section>
+
+    <section class="section" id="capabilities">
+      <div class="shell">
+        <div class="split">
+          <h2>监测、记录，<br />以及必要的编排。</h2>
+          <p class="aside">由哔哩哔哩作者 Sakula_小柚柚 开发并持续发布。2.0.0 在原有功率记录之外，补充了连接信息、速率组件与自律空间。</p>
+        </div>
+        <div class="features">
+          <article class="feature"><small>01</small><h3>实时监测</h3><p>同一界面读取瞬时功率、电压、电流与温度。电流单位自动识别为 μA 或 mA，显示异常时可手动切换。</p></article>
+          <article class="feature"><small>02</small><h3>会话与曲线</h3><p>记录起止电量、峰值与平均功率、温度变化及结束原因，并将功率、温度与电量绘制为曲线。</p></article>
+          <article class="feature"><small>03</small><h3>主屏编排</h3><p>组件可添加、移除，并调整尺寸与位置。刷新率、循环次数与核心频率可按需要放入主屏。</p></article>
+          <article class="feature"><small>04</small><h3>悬浮窗</h3><p>支持展开与收起两种布局。2.0.0 起可加入分别显示上传与下载速率的网络组件。</p></article>
+          <article class="feature"><small>05 · 2.0.0</small><h3>连接信息</h3><p>可查看 Wi-Fi 与移动网络的运营商、制式、频段、协商速率及信号强度，并支持多 SIM 卡与详情展开。</p></article>
+          <article class="feature"><small>06</small><h3>功耗统计与应用冰箱</h3><p>按应用区分前台、后台、前台服务与缓存耗电。应用冰箱为公测功能，可按名称、包名或 UID 检索。</p></article>
+          <article class="feature"><small>07 · 2.0.0</small><h3>自律空间</h3><p>支持定时冷藏第三方应用，并可设置豁免项。本次结束后自动恢复，用于减少后台干扰。</p></article>
+          <article class="feature"><small>08</small><h3>校准、处理器与剩余时间</h3><p>提供功率校准。可查看芯片型号、频率与各核心占用；部分温度需 Shizuku。2.0.0 更新了剩余放电时间的预测模型。</p></article>
         </div>
       </div>
     </section>
 
-    <section class="wrap block" id="features">
-      <h2>主屏上能看见的，和记下来的</h2>
-      <div class="cards">
-        <article class="card"><h3>一屏读完</h3><p>瞬时功率、电压、电流和温度放在同一块主屏。电流单位自动识别 μA / mA，不对还能手动切。</p></article>
-        <article class="card"><h3>一次充放，一条曲线</h3><p>记下起止电量、峰值和平均功率、温度变化，以及这次为什么结束。</p></article>
-        <article class="card"><h3>主屏按你的习惯排</h3><p>组件可以加、可以删，尺寸和位置自己定。刷新率、循环次数、核心频率都能摆上来。</p></article>
-        <article class="card"><h3>悬浮窗跟着走</h3><p>展开和收起两种布局，深色浅色都能存成方案。看视频或跑分时不必来回切应用。</p></article>
-        <article class="card"><span class="tag">1.9.0</span><h3>功耗统计</h3><p>按应用拆开前台、后台、前台服务和缓存耗电，并给出区间占比。</p></article>
-        <article class="card"><span class="tag">测试</span><h3>应用冰箱</h3><p>用冷藏室和冷冻室管理后台进程，搜索应用名、包名或 UID。</p></article>
-      </div>
-      <ul class="chips">
-        <li>校准算法（1.9.0 再优化过）</li>
-        <li>处理器型号、频率与每核占用</li>
-        <li>部分温度需要 Shizuku</li>
-        <li>状态栏与灵动岛常驻</li>
-        <li>无电池设备也能看功率</li>
-        <li>OPPO 系电流单位单独适配</li>
-      </ul>
-    </section>
-
-    <section class="wrap block" id="shots">
-      <h2>界面</h2>
-      <p class="muted">点开看大图。截图来自正式版界面。</p>
-      <div class="rail" id="rail"></div>
-    </section>
-
-    <section class="wrap block" id="support">
-      <h2>机型</h2>
-      <div class="split">
-        <div class="panel">
-          <p class="big">98.6%</p>
-          <p>作者标注的主流机型支持率。中兴、努比亚、红魔上效果最好。</p>
+    <section class="section section-alt" id="devices">
+      <div class="shell support">
+        <div class="figure">
+          <b>98.6%</b>
+          <span>作者标注的主流机型支持率，不是第三方实验室的抽样结论。</span>
         </div>
-        <ul class="panel">
-          <li>OPPO 系电流单位做了单独适配。</li>
-          <li>没有电池的设备也可以查看功率。</li>
-          <li>部分异形屏仍可能显示不佳，欢迎反馈。</li>
-          <li>1.8.0 起需要 Android 12。更低版本请用 1.4.0。</li>
+        <div>
+          <h2>面向主流 Android 机型。</h2>
+          <ul class="notes">
+            <li><strong>表现最完整的机型：</strong>中兴、努比亚、红魔系列。</li>
+            <li><strong>OPPO 系：</strong>已针对电流单位差异单独适配。</li>
+            <li><strong>无电池设备：</strong>亦可查看功率。</li>
+            <li><strong>异形屏：</strong>部分机型仍可能显示不足，欢迎通过 Issues 反馈。</li>
+            <li><strong>系统：</strong>1.8.0 及后续版本需要 Android 12 及以上。更低系统请使用 1.4.0。</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="versions">
+      <div class="shell">
+        <div class="split">
+          <h2>版本记录</h2>
+          <p class="aside">完整发布说明与历史安装包见 <a href="https://github.com/Sakula-Yuzu/Yuzu.Power/releases" target="_blank" rel="noreferrer">GitHub Releases</a>。</p>
+        </div>
+        <div class="versions">
+          <article class="ver"><b>2.0.0<span class="current">当前</span></b><time datetime="2026-11-16">2026-11-16</time><p>新增连接信息、网络速率组件与自律空间；统计 Shizuku 守护近 24 小时的恢复次数；更新剩余时间预测，并降低后台采样的内存占用与功耗。</p></article>
+          <article class="ver"><b>1.9.0</b><time datetime="2026-11-04">2026-11-04</time><p>优化校准算法与部分界面。新增应用冰箱（测试）与功耗统计。特别鸣谢迁至「关于 → 更新与声明」，隐藏后台迁至「稳定运行」。</p></article>
+          <article class="ver"><b>1.8.0</b><time datetime="2026-10-31">2026-10-31</time><p>重构应用架构。新增校准、处理器信息、界面自定义与悬浮窗。自此版本起，最低系统为 Android 12。</p></article>
+          <article class="ver"><b>1.4.0</b><time datetime="2026-09-15">2026-09-15</time><p>重构界面并加入软件优化。若停留在优化界面，请清除本应用数据后重新进入。</p></article>
+          <article class="ver"><b>1.0.0</b><time datetime="2026-08-09">2026-08-09</time><p>首个正式版。此前经过 34 个版本打磨。1.2.0 与 1.3.0 分别处理了返回卡顿，以及部分异形屏与第三方灵动岛说明。</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="download" id="download">
+      <div class="shell">
+        <p class="eyebrow">下载</p>
+        <h2>从 GitHub Releases 获取安装包。</h2>
+        <div class="hero-actions actions-start" style="justify-content:flex-start;margin-top:1.75rem">
+          <a class="btn btn-primary" href="https://github.com/Sakula-Yuzu/Yuzu.Power/releases/download/%E6%AD%A3%E5%BC%8F%E7%89%882.0.0/Yuzu.Power2.0.0-PL.apk">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+            正式版 2.0.0（约 20.6 MB）
+          </a>
+          <a class="btn btn-ghost" href="https://github.com/Sakula-Yuzu/Yuzu.Power/releases/download/%E6%AD%A3%E5%BC%8F%E7%89%881.4.0/Yuzu.Power-PL.apk">
+            旧版 1.4.0（Android 12 以下）
+          </a>
+        </div>
+        <div class="meta">
+          <div><small>文件名</small><strong>Yuzu.Power2.0.0-PL.apk</strong></div>
+          <div><small>来源</small><strong>GitHub Releases</strong></div>
+          <div><small>系统</small><strong>Android 12+</strong></div>
+          <div><small>备用</small><strong>1.4.0 仍可用</strong></div>
+        </div>
+        <ul class="caution">
+          <li>请只从 GitHub Releases 下载，本站不托管安装包。</li>
+          <li>本站不读取访客设备的电池或任何系统数据。</li>
+          <li>从旧版升级前建议备份数据；架构重构版本请先确认系统版本。</li>
         </ul>
       </div>
     </section>
 
-    <section class="wrap block" id="versions">
-      <div class="ver-head">
-        <h2>版本</h2>
-        <a href="https://github.com/Sakula-Yuzu/Yuzu.Power/releases">在 GitHub 查看全部发布</a>
-      </div>
-      <ol class="vers">
-        <li class="ver"><div class="ver-head"><strong>1.9.0 <span class="badge">当前</span></strong><time datetime="2026-11-04">2026-11-04</time></div><ul><li>优化校准算法和部分界面排版</li><li>新增应用冰箱（测试）与功耗统计</li><li>特别鸣谢迁到关于 → 更新与声明</li><li>隐藏后台迁到稳定运行</li></ul></li>
-        <li class="ver"><div class="ver-head"><strong>1.8.0</strong><time datetime="2026-10-31">2026-10-31</time></div><ul><li>架构重构，加入校准、CPU 信息、界面自定义和悬浮窗</li><li>最低系统改为 Android 12</li></ul></li>
-        <li class="ver"><div class="ver-head"><strong>1.4.0</strong><time datetime="2026-09-15">2026-09-15</time></div><ul><li>重构界面，加入软件优化。卡在优化界面时，清除本应用数据后再开</li></ul></li>
-        <li class="ver"><div class="ver-head"><strong>1.3.0</strong><time datetime="2026-09-01">2026-09-01</time></div><ul><li>优化部分异形屏，补充第三方灵动岛进度说明</li></ul></li>
-        <li class="ver"><div class="ver-head"><strong>1.2.0</strong><time datetime="2026-08-20">2026-08-20</time></div><ul><li>修复部分界面返回卡顿或黑屏，重排文字</li></ul></li>
-        <li class="ver"><div class="ver-head"><strong>1.0.0</strong><time datetime="2026-08-09">2026-08-09</time></div><ul><li>正式版。此前打磨了 34 个版本</li></ul></li>
-      </ol>
-      <aside class="note">
-        <strong>升级前先看这几句</strong>
-        <p class="muted">从 1.4.0 升级请备份数据，装完清除应用数据再重新导入。从 1.8.0 升到 1.9.0 后如果 Shizuku 失效，停掉服务再激活，建议用 AxManager。低于 Android 12 会闪退，请改用 1.4.0。</p>
-      </aside>
-    </section>
-
-    <section class="wrap block" id="download">
-      <div class="download">
-        <p><strong>Android · 正式版 1.9.0</strong></p>
-        <h2>从 GitHub 安装</h2>
-        <p>本页不托管文件。安装包在 Releases，文件名 Yuzu.Power_1.9.0_PL.apk，约 19.7 MB。安装前允许来自该来源的应用。</p>
-        <div class="actions">
-          <a class="btn btn-ink" href="https://github.com/Sakula-Yuzu/Yuzu.Power/releases/download/%E6%AD%A3%E5%BC%8F%E7%89%881.9.0/Yuzu.Power_1.9.0_PL.apk">下载 APK</a>
-          <a class="btn btn-ghost" href="https://github.com/Sakula-Yuzu/Yuzu.Power/releases" style="border-color: color-mix(in srgb, var(--ink) 25%, transparent)">全部版本</a>
+    <section class="section" id="faq">
+      <div class="shell">
+        <div class="split">
+          <h2>常见问题</h2>
+          <p class="aside">若仍有疑问，可在 GitHub Issues 或哔哩哔哩动态下留言。</p>
+        </div>
+        <div class="faq">
+          <details>
+            <summary>这是游戏模拟器吗？<span>+</span></summary>
+            <p>不是。Yuzu.Power 只监测 Android 设备的充放电功率。名称中的 Yuzu 来自作者所用的「柚」，与游戏主机及模拟器无关。</p>
+          </details>
+          <details>
+            <summary>哪些设备可以使用？<span>+</span></summary>
+            <p>适用于 Android。作者标注的主流机型支持率为 98.6%，中兴、努比亚与红魔系列表现最为完整。OPPO 系电流单位已单独适配，无电池设备亦可查看功率。1.8.0 及后续版本需要 Android 12 及以上；更低系统请安装 1.4.0。</p>
+          </details>
+          <details>
+            <summary>为何温度或处理器数据为空？<span>+</span></summary>
+            <p>部分温度与处理器信息需要 Shizuku 授权。编辑组件时，应用会标明哪些数据依赖该授权。建议使用 AxManager 进行管理。若从 1.8.0 升级后授权失效，请先停止 Shizuku，再重新激活。</p>
+          </details>
+          <details>
+            <summary>功率读数与充电器或功率计不一致？<span>+</span></summary>
+            <p>应用读取的是设备侧数据，并会自动识别电流单位。若单位明显异常，请在设置中手动切换 μA 与 mA。不同机型的传感器实现存在差异，读数不必与外置功率计完全相同。</p>
+          </details>
+          <details>
+            <summary>升级是否会丢失记录？<span>+</span></summary>
+            <p>从 1.4.0 升级时，请先备份，安装后清除本应用数据，再重新导入。1.8.0 为架构重构，更新前同样建议备份充电数据。若更新后闪退，请先确认系统是否为 Android 12 及以上。</p>
+          </details>
+          <details>
+            <summary>安装包从何处获取？<span>+</span></summary>
+            <p>请只从 GitHub Releases 下载。当前正式版文件为 Yuzu.Power2.0.0-PL.apk，约 20.6 MB。本站不托管安装包，也不读取访客设备的电池数据。</p>
+          </details>
         </div>
       </div>
     </section>
 
-    <section class="wrap block" id="faq">
-      <h2>问答</h2>
-      <div class="faq">
-        <details><summary>这是 Switch 模拟器吗？ <span>+</span></summary><p>不是。Yuzu.Power 只记录手机的充放电功率。名字里的 Yuzu 来自作者的「柚」，和任天堂主机、游戏模拟器没有关系。</p></details>
-        <details><summary>哪些手机能用？ <span>+</span></summary><p>Android 应用。作者标注主流机型支持率 98.6%，中兴、努比亚、红魔上效果最好。OPPO 系的电流单位单独处理过，没有电池的设备也能看功率。部分异形屏仍可能显示不佳。1.8.0 及之后需要 Android 12 及以上；更低系统请装 1.4.0。</p></details>
-        <details><summary>温度为空？ <span>+</span></summary><p>CPU、NPU 和表面温度需要 Shizuku 授权。编辑组件时，应用会提示哪些数据依赖它。授权建议用 AxManager。从 1.8.0 升到 1.9.0 后如果授权失效，先停掉 Shizuku 再重新激活。</p></details>
-        <details><summary>功率单位看起来不对？ <span>+</span></summary><p>应用会自动识别电流单位。如果显示异常，到设置里手动切换 μA / mA。</p></details>
-        <details><summary>升级会丢记录吗？ <span>+</span></summary><p>从 1.4.0 升级请先备份，装完清除本应用数据，再进应用重新导入。1.8.0 也是重大重构，更新前同样建议备份充电数据。闪退时先确认系统是不是 Android 12 及以上。</p></details>
-        <details><summary>安装包从哪里下？ <span>+</span></summary><p>只从 GitHub Releases 下载。本页不托管 APK。当前文件是 Yuzu.Power_1.9.0_PL.apk，约 19.7 MB。</p></details>
+    <section class="section section-alt section-follow" id="thanks">
+      <div class="shell">
+        <h2>致谢</h2>
+        <p class="credits-intro">开发与持续发布由哔哩哔哩作者 Sakula_小柚柚 完成。以下为本站整理的公开信息。</p>
+        <dl class="credits">
+          <dt>作者</dt><dd>Sakula_小柚柚</dd>
+          <dt>仓库</dt><dd><a href="https://github.com/Sakula-Yuzu/Yuzu.Power" target="_blank" rel="noreferrer">github.com/Sakula-Yuzu/Yuzu.Power</a></dd>
+          <dt>哔哩哔哩</dt><dd><a href="https://b23.tv/DTTEDLU" target="_blank" rel="noreferrer">b23.tv/DTTEDLU</a></dd>
+        </dl>
       </div>
-    </section>
-
-    <section class="wrap block" id="credits">
-      <h2>特别鸣谢</h2>
-      <p class="muted">排名不分先后。1.9.0 起这份名单也在应用的「关于 → 更新与声明」。</p>
-      <dl class="credits">
-        <div><dt>作者</dt><dd>Sakula_小柚柚</dd></div>
-        <div><dt>图标设计与制作</dt><dd>九烨</dd></div>
-        <div><dt>宣传</dt><dd>时葱葱呀zZ</dd></div>
-        <div><dt>资金援助</dt><dd>黑衣清衫、牙科么肆么_免费方式、嘉豪</dd></div>
-        <div><dt>测试</dt><dd>时葱葱呀zZ、Key、黑衣清衫、不是夕瓜我不吃、牙科么肆么_免费方式</dd></div>
-      </dl>
     </section>
   </main>
 
-  <footer>
-    <div class="wrap foot">
-      <p>Yuzu.Power · Sakula_小柚柚。项目目前未指定开源许可证。</p>
-      <nav>
-        <a href="https://b23.tv/DTTEDLU">哔哩哔哩</a>
-        <a href="https://github.com/Sakula-Yuzu/Yuzu.Power">GitHub</a>
-        <a href="https://github.com/Sakula-Yuzu/Yuzu.Power/issues">反馈</a>
-      </nav>
+  <footer class="footer">
+    <div class="shell">
+      <div class="footer-grid">
+        <div>
+          <a class="brand" href="#top">
+            <span class="mark" aria-hidden="true">Y</span>
+            Yuzu.Power
+          </a>
+          <p>面向 Android 的轻量级充放电功率监测。正式版 2.0.0。</p>
+        </div>
+        <div class="footer-links">
+          <strong>产品</strong>
+          <a href="#interface">界面</a>
+          <a href="#capabilities">能力</a>
+          <a href="#versions">版本</a>
+          <a href="#download">下载</a>
+        </div>
+        <div class="footer-links">
+          <strong>链接</strong>
+          <a href="https://github.com/Sakula-Yuzu/Yuzu.Power" target="_blank" rel="noreferrer">GitHub</a>
+          <a href="https://github.com/Sakula-Yuzu/Yuzu.Power/issues" target="_blank" rel="noreferrer">Issues</a>
+          <a href="https://b23.tv/DTTEDLU" target="_blank" rel="noreferrer">哔哩哔哩 · Sakula_小柚柚</a>
+        </div>
+      </div>
+      <div class="legal">
+        <span>© 2026 Sakula_小柚柚</span>
+        <span>本站为产品介绍，安装包以 GitHub Releases 为准。</span>
+      </div>
     </div>
   </footer>
 
-  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="截图" hidden>
-    <figure>
-      <img id="lb-img" alt="" />
-      <div class="lb-row">
-        <div>
-          <strong id="lb-title"></strong>
-          <p class="muted" id="lb-cap"></p>
+  <nav class="dots" aria-label="分节" id="dots-nav">
+    <a href="#top" data-dot="top"><span>概述</span></a>
+    <a href="#interface" data-dot="interface"><span>界面</span></a>
+    <a href="#capabilities" data-dot="capabilities"><span>能力</span></a>
+    <a href="#devices" data-dot="devices"><span>适配</span></a>
+    <a href="#versions" data-dot="versions"><span>版本</span></a>
+    <a href="#faq" data-dot="faq"><span>问答</span></a>
+    <a href="#download" data-dot="download"><span>下载</span></a>
+  </nav>
+
+  <dialog class="lightbox" id="lightbox" aria-labelledby="lightbox-title">
+    <div class="lightbox-card">
+      <img id="lightbox-img" src="" alt="" />
+      <div class="lightbox-bar">
+        <p>
+          <strong id="lightbox-title"></strong>
+          <span id="lightbox-caption"></span>
+        </p>
+        <div class="lightbox-actions">
+          <button class="icon-btn" type="button" id="lb-prev" aria-label="上一张">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+          </button>
+          <button class="icon-btn" type="button" id="lb-next" aria-label="下一张">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+          </button>
+          <button class="icon-btn" type="button" id="lb-close" aria-label="关闭">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+          </button>
         </div>
-        <button class="btn btn-ghost" type="button" id="lb-close">关闭</button>
       </div>
-    </figure>
-  </div>
+    </div>
+  </dialog>
 
   <script>
-    (function () {
-      var shots = [
-        ["shots/float.jpg", "主界面", "功率、温度、刷新率与处理器信息排在同一屏。"],
-        ["shots/custom.jpg", "组件自定义", "增删组件、调整尺寸。需要 Shizuku 的项会提前标明。"],
-        ["shots/session.jpg", "会话曲线", "一次放电的峰值、平均功率，以及电量和温度怎么走。"],
-        ["shots/cal.jpg", "悬浮窗", "展开与收起，深色或浅色，方案可以保存后再改。"],
-        ["shots/about.jpg", "校准", "校准过程里同时看功率、电流、电压和电荷量。"],
-        ["shots/stats.jpg", "功耗统计", "1.9.0：按应用看这段时间到底谁在耗电。"],
-        ["shots/fridge.jpg", "应用冰箱", "1.9.0 测试版：冷藏室、冷冻室，用来收后台。"],
-        ["shots/home.jpg", "关于", "版本、作者和鸣谢。1.9.0 起鸣谢在「更新与声明」。"]
-      ];
-      var rail = document.getElementById("rail");
-      var box = document.getElementById("lightbox");
-      shots.forEach(function (item) {
-        var fig = document.createElement("figure");
-        fig.className = "shot";
-        var btn = document.createElement("button");
-        btn.type = "button";
-        var img = document.createElement("img");
-        img.src = item[0];
-        img.alt = item[1];
-        btn.appendChild(img);
-        btn.addEventListener("click", function () { openShot(item); });
-        var cap = document.createElement("figcaption");
-        cap.innerHTML = "<p>" + item[1] + "</p><p class='muted'>" + item[2] + "</p>";
-        fig.appendChild(btn);
-        fig.appendChild(cap);
-        rail.appendChild(fig);
-      });
-      function openShot(item) {
-        document.getElementById("lb-img").src = item[0];
-        document.getElementById("lb-img").alt = item[1];
-        document.getElementById("lb-title").textContent = item[1];
-        document.getElementById("lb-cap").textContent = item[2];
-        box.hidden = false;
-        box.classList.add("open");
-      }
-      function closeShot() {
-        box.classList.remove("open");
-        box.hidden = true;
-      }
-      document.getElementById("lb-close").addEventListener("click", closeShot);
-      box.addEventListener("click", function (event) {
-        if (event.target === box) closeShot();
-      });
-      document.addEventListener("keydown", function (event) {
-        if (event.key === "Escape") closeShot();
-      });
+(function () {
+  const SHOTS = [
+    { src: "shots/network.jpg", title: "主界面", caption: "正式版 2.0.0。功率、连接信息与本次放电置于同一主屏。" },
+    { src: "shots/session.jpg", title: "会话详情", caption: "起止电量、峰值、平均功率与温度，以及对应曲线。" },
+    { src: "shots/float.jpg", title: "悬浮窗", caption: "展开与收起两种布局，深色与浅色方案均可保存。" },
+    { src: "shots/focus.jpg", title: "应用冰箱", caption: "公测功能。冷藏、冷冻与自律空间用于管理后台进程。" },
+    { src: "shots/guard.jpg", title: "稳定运行", caption: "Shizuku 连接、监控守护与后台采样相关设置。" }
+  ];
 
-      var menuBtn = document.querySelector(".menu-btn");
-      var mobile = document.querySelector(".nav-mobile");
-      menuBtn.addEventListener("click", function () {
-        var open = mobile.classList.toggle("open");
-        mobile.hidden = !open;
-        menuBtn.setAttribute("aria-expanded", open ? "true" : "false");
-        menuBtn.setAttribute("aria-label", open ? "关闭菜单" : "打开菜单");
-        menuBtn.textContent = open ? "×" : "☰";
-      });
-      mobile.querySelectorAll("a").forEach(function (link) {
-        link.addEventListener("click", function () {
-          mobile.classList.remove("open");
-          mobile.hidden = true;
-          menuBtn.setAttribute("aria-expanded", "false");
-          menuBtn.textContent = "☰";
-        });
-      });
+  const header = document.getElementById("site-header");
+  const menuBtn = document.getElementById("menu-btn");
+  const nav = document.getElementById("main-nav");
+  const iconMenu = document.getElementById("icon-menu");
+  const iconClose = document.getElementById("icon-close");
+  let menuOpen = false;
 
-      var labels = ["瞬时功率", "电池电流", "电池电压", "电池温度", "NPU 温度", "CPU 占用"];
-      var tiles = document.getElementById("tiles");
-      var nodes = labels.map(function (label) {
-        var div = document.createElement("div");
-        div.className = "tile";
-        div.innerHTML = "<span>" + label + "</span><strong>0</strong>";
-        tiles.appendChild(div);
-        return div.querySelector("strong");
-      });
-      var history = [-2.1, -2.8, -3.4, -4.6, -3.1, -2.9, -3.8, -4.2, -3.5, -3.1, -4.4, -3.6];
-      var spark = document.getElementById("spark");
-      function draw() {
-        var min = Math.min.apply(null, history.concat([-8]));
-        var max = Math.max.apply(null, history.concat([8]));
-        var span = max - min || 1;
-        var d = history.map(function (v, i) {
-          var x = (i / Math.max(history.length - 1, 1)) * 100;
-          var y = 28 - ((v - min) / span) * 24;
-          return (i === 0 ? "M" : "L") + x.toFixed(2) + " " + y.toFixed(2);
-        }).join(" ");
-        spark.innerHTML = "<path d='" + d + "' fill='none' stroke='#d2c0ff' stroke-width='1.6'/>";
-      }
-      function fmt(n, digits) {
-        return (n > 0 ? "+" : "") + n.toFixed(digits);
-      }
-      function paint(t) {
-        var charging = Math.floor(t / 14) % 2 === 1;
-        var wobble = Math.sin(t * 1.25) * 0.42 + Math.sin(t * 0.33) * 0.9;
-        var power = charging ? 11.4 + wobble * 3.2 : -3.1 + wobble * 2.1;
-        var voltage = charging ? 4.28 + Math.sin(t * 0.2) * 0.04 : 4.02 + Math.sin(t * 0.18) * 0.06;
-        history.push(power);
-        history = history.slice(-28);
-        nodes[0].textContent = fmt(power, 2) + " W";
-        nodes[1].textContent = fmt(power / voltage, 2) + " A";
-        nodes[2].textContent = voltage.toFixed(2) + " V";
-        nodes[3].textContent = (36.1 + Math.sin(t * 0.22) * 0.7 + (charging ? 0.8 : 0)).toFixed(1) + " °C";
-        nodes[4].textContent = (44 + Math.sin(t * 0.55) * 3.2).toFixed(1) + " °C";
-        nodes[5].textContent = (16 + Math.abs(Math.sin(t * 0.8)) * 28).toFixed(0) + "%";
-        document.getElementById("status").textContent = charging ? "充电中" : "放电中";
-        draw();
-      }
-      var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      paint(2.4);
-      if (!reduce) {
-        var start = performance.now();
-        setInterval(function () { paint((performance.now() - start) / 1000); }, 180);
-      }
-    })();
+  function setMenu(open) {
+    menuOpen = open;
+    nav.classList.toggle("is-open", open);
+    header.classList.toggle("is-solid", open || window.scrollY > 8);
+    menuBtn.setAttribute("aria-expanded", open ? "true" : "false");
+    menuBtn.setAttribute("aria-label", open ? "关闭导航" : "打开导航");
+    iconMenu.style.display = open ? "none" : "block";
+    iconClose.style.display = open ? "block" : "none";
+    document.body.style.overflow = open ? "hidden" : "";
+  }
+
+  menuBtn.addEventListener("click", () => setMenu(!menuOpen));
+  document.getElementById("brand-link").addEventListener("click", () => setMenu(false));
+  nav.querySelectorAll("[data-nav]").forEach((a) => {
+    a.addEventListener("click", () => setMenu(false));
+  });
+
+  window.addEventListener("scroll", () => {
+    header.classList.toggle("is-solid", menuOpen || window.scrollY > 8);
+  }, { passive: true });
+
+  // Section dots / active nav
+  const DOT_IDS = ["top", "interface", "capabilities", "devices", "versions", "faq", "download"];
+  const nodes = DOT_IDS.map((id) => document.getElementById(id)).filter(Boolean);
+  const observer = new IntersectionObserver((entries) => {
+    const visible = entries
+      .filter((e) => e.isIntersecting)
+      .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+    if (!visible || !visible.target.id) return;
+    const id = visible.target.id;
+    document.querySelectorAll("#dots-nav a").forEach((a) => {
+      a.setAttribute("aria-current", a.getAttribute("data-dot") === id ? "true" : null);
+    });
+    document.querySelectorAll("#main-nav a[data-nav]").forEach((a) => {
+      const href = a.getAttribute("href") || "";
+      a.setAttribute("aria-current", href === "#" + id ? "true" : null);
+    });
+  }, { rootMargin: "-45% 0px -45% 0px", threshold: [0.15, 0.4, 0.7] });
+  nodes.forEach((n) => observer.observe(n));
+
+  // Lightbox
+  const dialog = document.getElementById("lightbox");
+  const lbImg = document.getElementById("lightbox-img");
+  const lbTitle = document.getElementById("lightbox-title");
+  const lbCaption = document.getElementById("lightbox-caption");
+  let shotIndex = 0;
+
+  function showShot(i) {
+    shotIndex = (i + SHOTS.length) % SHOTS.length;
+    const s = SHOTS[shotIndex];
+    lbImg.src = s.src;
+    lbImg.alt = s.caption;
+    lbTitle.textContent = s.title;
+    lbCaption.textContent = s.caption;
+    if (!dialog.open) dialog.showModal();
+  }
+
+  document.querySelectorAll("[data-shot]").forEach((btn) => {
+    btn.addEventListener("click", () => showShot(Number(btn.getAttribute("data-shot"))));
+  });
+  document.getElementById("lb-prev").addEventListener("click", () => showShot(shotIndex - 1));
+  document.getElementById("lb-next").addEventListener("click", () => showShot(shotIndex + 1));
+  document.getElementById("lb-close").addEventListener("click", () => dialog.close());
+  dialog.addEventListener("click", (e) => {
+    if (e.target === dialog) dialog.close();
+  });
+
+  // FAQ +/− toggle visual
+  document.querySelectorAll(".faq details").forEach((d) => {
+    const span = d.querySelector("summary span");
+    d.addEventListener("toggle", () => {
+      if (span) span.textContent = d.open ? "−" : "+";
+    });
+  });
+})();
   </script>
 </body>
 </html>
