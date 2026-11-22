@@ -77,7 +77,7 @@ if (downloadTrigger && downloadDialog) {
   const manualLink = downloadDialog.querySelector('[data-download-link]');
   const downloadUrls = JSON.parse(downloadDialog.dataset.downloadUrls);
   const english = document.documentElement.lang === 'en';
-  const copyText = english ? 'Copy Xunlei link' : '复制迅雷链接';
+  const copyText = english ? 'Copy  link' : '复制下载链接';
   manualLink.value = downloadUrls[0];
   let downloadCountedThisVisit = false;
   const reportDownloadCopy = () => {
