@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0a0c0b">
+  <meta name="description" content="Learn how Yuzu.Power handles battery data, app settings and charge/discharge records locally, and how notification and background permissions are used. Yuzu.Power does not connect to the internet and has no ads.">
+  <title>Privacy policy - Yuzu.Power</title>
+  <link rel="canonical" href="privacy.html">
+  <link rel="alternate" hreflang="zh-CN" href="../privacy.html">
+  <link rel="alternate" hreflang="en" href="privacy.html">
+  <link rel="alternate" hreflang="x-default" href="../privacy.html">
+  <meta property="og:title" content="Privacy policy - Yuzu.Power">
+  <meta property="og:description" content="Learn how Yuzu.Power handles battery data, app settings and charge/discharge records locally, and how notification and background permissions are used. Yuzu.Power does not connect to the internet and has no ads.">
+  <meta property="og:url" content="https://www.leleone.cn/en/privacy">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="zh_CN">
+  <meta property="og:type" content="website">
+  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon-v2.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/yuzu-power-favicon-v7-32.png">
+  <link rel="icon" href="../favicon-rounded-v6.ico">
+  <link rel="mask-icon" href="../assets/yuzu-power-safari-mask.svg" color="#2d4a6c">
+  <link rel="stylesheet" href="../assets/fonts/harmonyos/harmonyos-site-merged.css">
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="../responsive.css">
+  <script src="../site.js" defer></script>
+</head>
+<body class="subpage">
+  <header class="site-header" data-header>
+    <div class="shell header-inner">
+      <a class="brand" href="index.html"><img src="../assets/yuzu-power-icon-source.svg" alt="" width="42" height="42"><span>Yuzu.Power</span></a>
+      <button class="menu-button" type="button" aria-label="Open navigation" aria-expanded="false" data-menu-button><span></span><span></span></button>
+      <nav class="nav" aria-label="Main navigation" data-nav><a href="index.html#experience">Interface</a><a href="index.html#features">Themes</a><a href="index.html#overlay-promo">Overlay</a><a href="index.html#capabilities">Features</a><a href="privacy.html">Privacy</a><a href="changelog.html">Changelog</a><a class="nav-download" href="index.html#download">Download</a></nav>
+      <span class="language-switcher header-language" data-active-language="en" aria-label="Language switcher"><a href="../privacy.html" lang="zh-CN">中</a><a href="privacy.html" lang="en" aria-current="page">EN</a></span>
+    </div>
+  </header>
+  <main>
+    <header class="legal-hero">
+      <div class="shell">
+        <p class="eyebrow">Privacy</p>
+        <h1>Privacy policy</h1>
+        <p>Before using Yuzu.Power, we want you to know what information is read, why it is needed and where it is stored.</p>
+        <div class="legal-meta"><span>Effective date: November 14, 2026</span><span>Applicable version: 3.3.0</span></div>
+      </div>
+    </header>
+    <article class="legal-content">
+      <section>
+        <h2>1. Information we process</h2>
+        <p>To provide battery monitoring, Yuzu.Power reads and processes battery and device-runtime information supplied by Android locally on your device, including:</p>
+        <ul>
+          <li>Battery level, charging state, power source, temperature, voltage, current and cycle count when supplied by the system;</li>
+          <li>Instant power, charge/discharge rate, duration, curves and estimated full-charge time calculated from that data;</li>
+          <li>Wi-Fi and mobile network connection information, including carrier, network type, frequency band and signal strength when provided by Android;</li>
+          <li>App settings such as themes, displayed items, notification style, hardware corrections, home screen components and overlay layout configurations;</li>
+          <li>Additional device data accessed through Shizuku with your authorization, and wallpapers, layout share images or backup files you select;</li>
+          <li>Charge and discharge session records generated locally on the device.</li>
+        </ul>
+        <p>This information is used to show device status in the app, notifications, live overlays and widgets, and to create local history. The camera is used only to scan overlay layout share codes. Codes are recognized locally without uploading camera images.</p>
+      </section>
+      <section>
+        <h2>2. Where information is stored</h2>
+        <p>Yuzu.Power settings and charge/discharge records are stored locally in the app and are not uploaded to the developer’s servers. Uninstalling the app or clearing its data in system settings deletes this local information.</p>
+        <p>Android may include app data in device migration or cloud backup according to your backup settings. This process is controlled by Android and your chosen backup provider, not initiated by Yuzu.Power.</p>
+      </section>
+      <section>
+        <h2>3. Permissions and special access</h2>
+        <p>Notifications, camera, Shizuku, battery-optimization exemptions, overlays, exact alarms and accessibility access require approval or manual activation depending on your Android version and chosen features. Normal permissions for foreground services, boot broadcasts, wake locks, network state, Wi-Fi state and basic phone state are granted automatically without individual prompts. These state-reading permissions do not enable internet access, and Yuzu.Power does not request internet access permission.</p>
+        <p>The accessibility service is entirely optional and only uses window-state changes to restore background monitoring. It cannot read window content or input, or perform gestures. See <a href="permissions.html"><strong>permission details</strong></a>.</p>
+      </section>
+      <section>
+        <h2>4. External links</h2>
+        <p>Links such as the author homepage may open third-party websites in the system browser. After leaving Yuzu.Power, those sites handle information under their own privacy policies.</p>
+      </section>
+      <section>
+        <h2>5. Children’s privacy</h2>
+        <p>Yuzu.Power is a general-purpose device tool, not directed at children, and does not actively collect identity, contact or location information. Guardians can contact us through the author link in the app with privacy concerns.</p>
+      </section>
+      <section>
+        <h2>6. Contact us</h2>
+        <p>For questions about this policy or data practices, contact the developer through the author homepage in Yuzu.Power’s “About” page.</p>
+      </section>
+    </article>
+  </main>
+  <footer class="site-footer"><div class="shell footer-bottom"><span>© 2026 Yuzu.Power</span><a href="index.html">Back to home</a><a href="permissions.html">Permissions</a></div></footer>
+</body>
+</html>

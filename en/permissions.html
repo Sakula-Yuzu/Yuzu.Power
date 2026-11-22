@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0a0c0b">
+  <meta name="description" content="Yuzu.Power 3.0.0 permissions: Shizuku, the live overlay, camera scanning, image and file selection, notifications and background monitoring.">
+  <title>Permissions - Yuzu.Power</title>
+  <link rel="canonical" href="permissions.html">
+  <link rel="alternate" hreflang="zh-CN" href="../permissions.html">
+  <link rel="alternate" hreflang="en" href="permissions.html">
+  <link rel="alternate" hreflang="x-default" href="../permissions.html">
+  <meta property="og:title" content="Permissions - Yuzu.Power">
+  <meta property="og:description" content="Yuzu.Power 3.0.0 permissions: Shizuku, the live overlay, camera scanning, image and file selection, notifications and background monitoring.">
+  <meta property="og:url" content="https://www.leleone.cn/en/permissions">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="zh_CN">
+  <meta property="og:type" content="website">
+  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon-v2.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/yuzu-power-favicon-v7-32.png">
+  <link rel="icon" href="../favicon-rounded-v6.ico">
+  <link rel="mask-icon" href="../assets/yuzu-power-safari-mask.svg" color="#2d4a6c">
+  <link rel="stylesheet" href="../assets/fonts/harmonyos/harmonyos-site-merged.css">
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="../responsive.css">
+  <script src="../site.js" defer></script>
+</head>
+<body class="subpage">
+  <header class="site-header" data-header>
+    <div class="shell header-inner">
+      <a class="brand" href="index.html"><img src="../assets/yuzu-power-icon-source.svg" alt="" width="42" height="42"><span>Yuzu.Power</span></a>
+      <button class="menu-button" type="button" aria-label="Open navigation" aria-expanded="false" data-menu-button><span></span><span></span></button>
+      <nav class="nav" aria-label="Main navigation" data-nav><a href="index.html#experience">Interface</a><a href="index.html#features">Themes</a><a href="index.html#overlay-promo">Overlay</a><a href="index.html#capabilities">Features</a><a href="privacy.html">Privacy</a><a href="changelog.html">Changelog</a><a class="nav-download" href="index.html#download">Download</a></nav>
+      <span class="language-switcher header-language" data-active-language="en" aria-label="Language switcher"><a href="../permissions.html" lang="zh-CN">中</a><a href="permissions.html" lang="en" aria-current="page">EN</a></span>
+    </div>
+  </header>
+  <main>
+    <header class="legal-hero">
+      <div class="shell">
+        <p class="eyebrow">Permissions</p>
+        <h1>Permissions</h1>
+        <p>Understand how each permission is used and which access needs your approval or is granted automatically by the system.</p>
+        <div class="legal-meta"><span>Applies to: 3.3.0</span><span>Android 8.0+</span></div>
+      </div>
+    </header>
+    <article class="legal-content">
+      <section>
+        <h2>Permission overview</h2>
+        <p>Yuzu.Power 3.3.0 does not request internet access, contacts, SMS, call logs, microphone or location permissions. Camera access is used only to scan overlay layout share codes. You can still import layouts from images without camera access.</p>
+        <p>Not every item requires manual approval. Foreground services, boot broadcasts, wake locks, network state, Wi-Fi state and basic phone state use normal permissions granted by the system at installation, without individual runtime prompts or Deny buttons. Notifications, camera and special access are requested as needed for your Android version and chosen features. System image and file pickers provide only content you select.</p>
+        <table class="permission-table">
+          <thead><tr><th>Permission or access</th><th>Purpose</th><th>Authorization and impact</th></tr></thead>
+          <tbody>
+            <tr><td>Notifications and system Live Activities</td><td>Show background monitoring status, live data and system-supported Live Activities. Presentation depends on the system.</td><td>Android 13 and above require notification approval. Notifications can also be disabled in system settings. Without access, related notifications or Live Activities may not appear; in-app data remains available.</td></tr>
+            <tr><td>Foreground service</td><td>Run battery monitoring, charge/discharge logging and live overlay updates in the background, including a special-use foreground service declaration.</td><td>Granted automatically without individual approval. Background services remain subject to system execution rules.</td></tr>
+            <tr><td>Start on boot</td><td>Restore enabled battery monitoring and widget updates after reboot.</td><td>Boot broadcast permission is granted automatically. Some systems have separate autostart controls; restrictions may require manually opening the app after reboot.</td></tr>
+            <tr><td>Ignore battery optimization</td><td>Reduce monitoring gaps when the system pauses background work with the screen off.</td><td>Requires approval in a system prompt or settings. Without approval, background records and widget refreshes may be interrupted.</td></tr>
+            <tr><td>Exact alarms</td><td>Schedule more precise monitoring recovery and widget refreshes when allowed.</td><td>Managed through special app access on Android 12 and above. Without access, regular scheduling is used and refreshes may be delayed.</td></tr>
+            <tr><td>Display over other apps</td><td>Show the draggable, interactive live data overlay above other apps, with your selected components and custom layout.</td><td>Requires enabling Display over other apps in system settings. Without access, the overlay cannot appear. In-app data and layout editing remain available.</td></tr>
+            <tr><td>Shizuku authorization</td><td>Optionally use a running Shizuku service to read some device data unavailable with regular permissions. Connect and authorize under Stable Operation. Available data depends on the device and system.</td><td>Requires approval in Shizuku’s authorization prompt. Without access, data requiring Shizuku may be unavailable; data accessible with regular permissions remains available.</td></tr>
+            <tr><td>Camera</td><td>Use the camera only when you choose to scan an overlay layout share code.</td><td>Requested when scanning; you can deny or revoke it. Without access, camera scanning is unavailable, but importing a layout image remains available.</td></tr>
+            <tr><td>Accessibility service</td><td>Optionally receive window-change events and use window-state changes for monitoring recovery, without reading screen content or performing gestures.</td><td>Requires manually enabling the service in accessibility settings. Otherwise one recovery mechanism is unavailable. In-app use, layout editing and code import are unaffected.</td></tr>
+            <tr><td>Wake lock</td><td>Keep processing alive briefly so record writes are not interrupted.</td><td>Granted automatically without individual approval or a runtime permission toggle.</td></tr>
+            <tr><td>Storage write (Android 9 and below)</td><td>Save support QR images, layout share codes and posters to the gallery on older Android versions. Android 10 and above use system media APIs without this legacy permission.</td><td>Requested only when saving images on Android 8–9; you can deny or revoke it. Without access, images may not be saved. Monitoring and layout editing are unaffected.</td></tr>
+            <tr><td>System image and file pickers</td><td>Read your selected wallpaper, layout share image or backup, or export a backup to your chosen location. No entire-gallery or all-files access is requested.</td><td>You actively select content in a system picker. This does not authorize entire-gallery or all-files access. Cancelling only cancels the current operation.</td></tr>
+            <tr><td>Network state</td><td>Read network connection status for the Connection Information card and network speed component. This is separate from internet access permission.</td><td>Granted automatically without individual approval or a runtime permission toggle. It does not grant internet access.</td></tr>
+            <tr><td>Wi-Fi state</td><td>Read Wi-Fi connection, link rate, frequency band and signal information when provided by Android.</td><td>Granted automatically without individual approval. Available information depends on the Android version and system restrictions.</td></tr>
+            <tr><td>Basic phone state</td><td>Read basic mobile network state for the Connection Information card when supported by Android.</td><td>A normal permission on Android 13 and above, without individual approval. It does not grant access to call logs, SMS or phone numbers.</td></tr>
+          </tbody>
+        </table>
+      </section>
+      <section>
+        <h2>About the accessibility service</h2>
+        <p>The accessibility service is an optional advanced keep-alive method and is off by default. The current implementation has these limits:</p>
+        <ul>
+          <li>It is explicitly configured not to read window content;</li>
+          <li>It cannot perform taps, swipes or other gestures;</li>
+          <li>It cannot listen for keys or enable touch exploration;</li>
+          <li>It does not record screen text, input or used apps;</li>
+          <li>It receives window-change events and uses only window-state changes to trigger monitoring health recovery.</li>
+        </ul>
+      </section>
+      <section>
+        <h2>How to revoke permissions</h2>
+        <p>Revoke camera, notification or overlay access in Android Settings → Apps → Yuzu.Power → Permissions / Special app access. Accessibility and battery-optimization exclusions can be disabled on their own settings pages. Revoke Shizuku access in Shizuku’s authorized-app management. Setting names vary by system.</p>
+      </section>
+    </article>
+  </main>
+  <footer class="site-footer"><div class="shell footer-bottom"><span>© 2026 Yuzu.Power</span><a href="index.html">Back to home</a><a href="privacy.html">Privacy policy</a></div></footer>
+</body>
+</html>

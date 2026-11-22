@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0a0c0b">
+  <meta name="description" content="See the Yuzu.Power Android power monitor release history, including charging performance scoring, charging and battery-life predictions, built-in wallpapers, low-memory mode, recording and backups.">
+  <title>Changelog - Yuzu.Power</title>
+  <link rel="canonical" href="changelog.html">
+  <link rel="alternate" hreflang="zh-CN" href="../changelog.html">
+  <link rel="alternate" hreflang="en" href="changelog.html">
+  <link rel="alternate" hreflang="x-default" href="../changelog.html">
+  <meta property="og:title" content="Changelog - Yuzu.Power">
+  <meta property="og:description" content="See the Yuzu.Power Android power monitor release history, including charging performance scoring, charging and battery-life predictions, built-in wallpapers, low-memory mode, recording and backups.">
+  <meta property="og:url" content="https://www.leleone.cn/en/changelog">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="zh_CN">
+  <meta property="og:type" content="website">
+  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon-v2.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/yuzu-power-favicon-v7-32.png">
+  <link rel="icon" href="../favicon-rounded-v6.ico">
+  <link rel="mask-icon" href="../assets/yuzu-power-safari-mask.svg" color="#2d4a6c">
+  <link rel="stylesheet" href="../assets/fonts/harmonyos/harmonyos-site-merged.css">
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="../responsive.css">
+  <script src="../site.js" defer></script>
+</head>
+<body class="subpage">
+  <header class="site-header" data-header>
+    <div class="shell header-inner">
+      <a class="brand" href="index.html"><img src="../assets/yuzu-power-icon-source.svg" alt="" width="42" height="42"><span>Yuzu.Power</span></a>
+      <button class="menu-button" type="button" aria-label="Open navigation" aria-expanded="false" data-menu-button><span></span><span></span></button>
+      <nav class="nav" aria-label="Main navigation" data-nav><a href="index.html#experience">Interface</a><a href="index.html#features">Themes</a><a href="index.html#overlay-promo">Overlay</a><a href="index.html#capabilities">Features</a><a href="privacy.html">Privacy</a><a href="changelog.html">Changelog</a><a class="nav-download" href="index.html#download">Download</a></nav>
+      <span class="language-switcher header-language" data-active-language="en" aria-label="Language switcher"><a href="../changelog.html" lang="zh-CN">中</a><a href="changelog.html" lang="en" aria-current="page">EN</a></span>
+    </div>
+  </header>
+  <main>
+    <header class="legal-hero">
+      <div class="shell">
+        <p class="eyebrow">Release notes</p>
+        <h1>Changelog</h1>
+        <p>A record of feature changes, compatibility notes and important fixes for each public Yuzu.Power release.</p>
+      </div>
+    </header>
+    <article class="legal-content">
+      <div class="version-block" id="v3-3-0">
+        <div class="version-head"><h2>Yuzu.Power 3.3.0</h2><span>November 14, 2026</span></div>
+        <span class="version-tag">Released</span>
+        <h3>What’s new</h3>
+        <ul>
+          <li>Added a Connection Information card for Wi-Fi and mobile networks, including carrier, network type, frequency band and signal strength, with multi-SIM support and expandable details.</li>
+          <li>Added a floating network speed component showing upload and download rates separately.</li>
+          <li>Added Self-discipline space to suspend third-party apps for a set duration in one tap, with app exemptions and automatic restoration when the session ends, reducing distractions to help you focus.</li>
+          <li>Added a recovery counter showing how many times the Shizuku monitor guard successfully restored monitoring in the past 24 hours.</li>
+          <li>Updated the remaining discharge time prediction model for improved accuracy and lower prediction power consumption.</li>
+          <li>Optimized background sampling and task scheduling to reduce memory use and substantially lower standby power consumption.</li>
+          <li>Improved home card text fitting, stack transitions and detail expansion animations.</li>
+          <li>Improved component insertion and preview switching in the floating overlay editor.</li>
+          <li>Refined various details and fixed other issues.</li>
+        </ul>
+      </div>
+      <div class="version-block" id="v3-2-0">
+        <div class="version-head"><h2>Yuzu.Power 3.2.0</h2><span>November 3, 2026</span></div>
+        <span class="version-tag">Released</span>
+        <h3>What’s new</h3>
+        <ul>
+          <li>Added App freezer (Beta). Freeze, suspend, and restore apps through Shizuku, with batch operations from the freezer drawer.</li>
+          <li>Optimized history sampling and compressed storage to reduce storage usage over time.</li>
+          <li>Improved home screen card sizing, text layout, and transition animations.</li>
+          <li>Improved battery level and temperature curve smoothing, curve transitions, and animations when expanding charging and discharging records.</li>
+          <li>Improved loading of charging and discharging record details.</li>
+          <li>Improved the automatic calibration screen layout across different screen sizes.</li>
+          <li>Fixed an issue where selecting a home screen wallpaper could sometimes fail to open the crop screen.</li>
+          <li>Refined various details and fixed known issues.</li>
+        </ul>
+      </div>
+      <div class="version-block" id="v3-1-0">
+        <div class="version-head"><h2>Yuzu.Power 3.1.0</h2><span>October 31, 2026</span></div>
+        <span class="version-tag">Released</span>
+        <h3>What’s new</h3>
+        <ul>
+          <li>Added app battery usage statistics, with per-app rankings and details through Shizuku, plus search, sorting, and category filters.</li>
+          <li>Added Shizuku monitor guard to attempt recovery when the monitor process exits unexpectedly.</li>
+          <li>Stacked cards on the home screen now support long-press to expand.</li>
+          <li>Refined various details and fixed known issues.</li>
+        </ul>
+      </div>
+      <div class="version-block" id="v3-0-1">
+        <div class="version-head"><h2>Yuzu.Power 3.0.1</h2><span>October 25, 2026</span></div>
+        <span class="version-tag">Released</span>
+        <h3>What’s new</h3>
+        <ul>
+          <li>Fixed issues and improved the overall experience.</li>
+        </ul>
+      </div>
+      <div class="version-block" id="v3-0-0">
+        <div class="version-head"><h2>Yuzu.Power 3.0.0</h2><span>October 25, 2026</span></div>
+        <span class="version-tag">Released</span>
+        <h3>What’s new</h3>
+        <ul>
+          <li>Integrated Shizuku to access additional device data after authorization.</li>
+          <li>Redesigned the home screen with a variety of component cards. Add, reorder, resize, and stack cards freely.</li>
+          <li>Redesigned the live overlay with more data and functional components. Create custom layouts and save multiple configurations to switch between. Customize the language, font, and light or dark theme; adjust background and content opacity independently; set the automatic fade level; and save separate positions for portrait and landscape.</li>
+          <li>Added live overlay layout sharing. Create share posters and codes, then import a layout by scanning a code or selecting an image.</li>
+          <li>Added the Obsidian and Ember themes, and refined the colors of existing themes.</li>
+          <li>Added a guided automatic calibration flow.</li>
+          <li>Added charging animations.</li>
+          <li>Added a particle starfield effect with HDR support for the automatic calibration guide and charging animation screens.</li>
+          <li>Added a built-in wallpaper.</li>
+          <li>Refined various details and fixed known issues.</li>
+        </ul>
+      </div>
+      <div class="version-block">
+        <div class="version-head"><h2>Yuzu.Power 2.5.0</h2><span>September 30, 2026</span></div>
+        <span class="version-tag">Released</span>
+        <h3>What’s new</h3>
+        <ul>
+          <li>Added a live data floating window to check battery level, temperature, thermal status, power, voltage, current, CPU frequency and more in real time outside the app.</li>
+          <li>Numerous refinements.</li>
+        </ul>
+      </div>
+      <div class="version-block">
+        <div class="version-head"><h2>Yuzu.Power 2.4.1</h2><span>September 11, 2026</span></div>
+        <span class="version-tag">Released</span>
+        <h3>What’s new</h3>
+        <ul>
+          <li>Numerous refinements.</li>
+        </ul>
+      </div>
+      <div class="version-block">
+        <div class="version-head"><h2>Yuzu.Power 2.4.0</h2><span>September 11, 2026</span></div>
+        <span class="version-tag">Released</span>
+        <h3>What’s new</h3>
+        <ul>
+          <li>Added charging performance scoring: qualifying charging sessions are now scored automatically.</li>
+          <li>Added a temperature readout to the live notification icon mode.</li>
+          <li>Improved the charging and battery-life prediction models.</li>
+          <li>Improved charging session detection, gap handling, and history reconstruction to reduce interrupted or incomplete records.</li>
+          <li>Polished the low-memory mode experience.</li>
+          <li>Numerous refinements.</li>
+        </ul>
+      </div>
+      <div class="version-block">
+        <div class="version-head"><h2>Yuzu.Power 2.3.1</h2><span>August 26, 2026</span></div>
+        <span class="version-tag">Released</span>
+        <h3>What’s new</h3>
+        <ul>
+          <li>Improved the charging and battery-life prediction models.</li>
+        </ul>
+      </div>
+      <div class="version-block">
+        <div class="version-head"><h2>Yuzu.Power 2.3.0</h2><span>August 23, 2026</span></div>
+        <span class="version-tag">Released</span>
+        <h3>What’s new</h3>
+        <ul>
+          <li>Added card blur on the home screen for a richer feel.</li>
+          <li>Added five built-in wallpapers.</li>
+          <li>Further optimized low-memory mode for lower usage.</li>
+          <li>Improved charge/discharge session detection to reduce fragmented records when the app is removed from the background.</li>
+          <li>Added data backup and restore.</li>
+          <li>Many small improvements.</li>
+        </ul>
+      </div>
+    </article>
+  </main>
+  <footer class="site-footer"><div class="shell footer-bottom"><span>© 2026 Yuzu.Power</span><a href="index.html">Back to home</a><a href="privacy.html">Privacy policy</a></div></footer>
+</body>
+</html>
