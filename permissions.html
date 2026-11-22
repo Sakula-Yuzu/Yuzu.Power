@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0a0c0b">
+  <meta name="description" content="Yuzu.Power 3.0.0 权限说明：Shizuku 授权、实时悬浮窗、相机扫码、图片与文件选择、通知和后台监测。">
+  <title>权限说明 - Yuzu.Power</title>
+  <link rel="canonical" href="permissions.html">
+  <link rel="alternate" hreflang="zh-CN" href="permissions.html">
+  <link rel="alternate" hreflang="en" href="en/permissions.html">
+  <link rel="alternate" hreflang="x-default" href="permissions.html">
+  <meta property="og:title" content="权限说明 - Yuzu.Power">
+  <meta property="og:description" content="Yuzu.Power 3.0.0 权限说明：Shizuku 授权、实时悬浮窗、相机扫码、图片与文件选择、通知和后台监测。">
+  <meta property="og:url" content="https://www.leleone.cn/permissions">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:type" content="website">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon-v2.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/yuzu-power-favicon-v7-32.png">
+  <link rel="icon" href="favicon-rounded-v6.ico">
+  <link rel="mask-icon" href="assets/yuzu-power-safari-mask.svg" color="#2d4a6c">
+  <link rel="stylesheet" href="assets/fonts/harmonyos/harmonyos-site-merged.css">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="responsive.css">
+  <script src="site.js" defer></script>
+</head>
+<body class="subpage">
+  <header class="site-header" data-header>
+    <div class="shell header-inner">
+      <a class="brand" href="index.html"><img src="assets/yuzu-power-icon-source.svg" alt="" width="42" height="42"><span>Yuzu.Power</span></a>
+      <button class="menu-button" type="button" aria-label="打开导航" aria-expanded="false" data-menu-button><span></span><span></span></button>
+      <nav class="nav" aria-label="主导航" data-nav><a href="index.html#experience">界面</a><a href="index.html#features">主题</a><a href="index.html#overlay-promo">悬浮窗</a><a href="index.html#capabilities">功能</a><a href="privacy.html">隐私</a><a href="changelog.html">更新日志</a><a class="nav-download" href="index.html#download">下载</a></nav>
+      <span class="language-switcher header-language" data-active-language="zh" aria-label="语言切换"><a href="permissions.html" lang="zh-CN" aria-current="page">中</a><a href="en/permissions.html" lang="en">EN</a></span>
+    </div>
+  </header>
+  <main>
+    <header class="legal-hero">
+      <div class="shell">
+        <p class="eyebrow">Permissions</p>
+        <h1>权限说明</h1>
+        <p>了解各项权限的用途，区分需要手动授权的访问与系统自动授予的权限。</p>
+        <div class="legal-meta"><span>适用版本：3.3.0</span><span>Android 8.0+</span></div>
+      </div>
+    </header>
+    <article class="legal-content">
+      <section>
+        <h2>权限用途一览</h2>
+        <p>Yuzu.Power 3.3.0 不申请互联网访问、通讯录、短信、通话记录、麦克风或位置权限。相机仅用于扫描悬浮窗布局分享码；不授权相机时，仍可从图片导入布局。</p>
+        <p>并非每一项都需要你手动授权。前台服务、开机广播、唤醒锁、网络状态、Wi-Fi 状态和基础电话状态使用系统安装时授予的普通权限，不会单独弹出授权请求，也没有对应的运行时“拒绝”按钮。通知、相机及特殊访问权限则按系统版本和功能需要申请；系统图片与文件选择器只提供你主动选中的内容。</p>
+        <table class="permission-table">
+          <thead><tr><th>权限或访问</th><th>用途</th><th>授权方式与影响</th></tr></thead>
+          <tbody>
+            <tr><td>通知与系统实时活动</td><td>显示后台监测状态、实时数据及系统支持的实时活动，展示效果取决于系统支持情况。</td><td>Android 13 及以上需要通知授权，也可在系统设置中关闭通知。未授权或关闭后，相关通知或实时活动可能无法显示，仍可在应用内查看数据。</td></tr>
+            <tr><td>前台服务</td><td>持续进行后台电池监测、充放电记录和实时悬浮窗更新，包含特殊用途前台服务声明。</td><td>系统自动授予，无需单独确认。后台服务仍受系统运行规则限制。</td></tr>
+            <tr><td>开机启动</td><td>设备重启后恢复已开启的电池监测和小组件更新。</td><td>接收开机广播的权限由系统自动授予。部分系统另有自启动管理；若被限制，重启后可能需要手动打开应用。</td></tr>
+            <tr><td>忽略电池优化</td><td>减少息屏后监测被系统暂停造成的记录断档。</td><td>需要你在系统提示或设置中允许。未允许时，后台记录和小组件刷新可能不连续。</td></tr>
+            <tr><td>精确闹钟</td><td>在系统允许时安排更准时的监测恢复与小组件刷新。</td><td>Android 12 及以上由系统特殊访问设置管理。未允许时使用普通调度，刷新时间可能有延迟。</td></tr>
+            <tr><td>悬浮窗</td><td>在其他应用上方显示可拖动、可交互的实时数据悬浮窗，展示所选组件和自定义布局。</td><td>需要在系统设置中允许“显示在其他应用上层”。未允许时无法显示悬浮窗；应用内数据查看和布局编辑仍可使用。</td></tr>
+            <tr><td>Shizuku 授权</td><td>可选地通过已启动的 Shizuku 服务读取普通权限下无法获得的部分设备数据，在“稳定运行”中连接和授权。实际可读项目取决于设备与系统。</td><td>需要在 Shizuku 的授权提示中允许。未授权时，需要 Shizuku 的数据项可能不可用，普通权限下可获取的数据仍可显示。</td></tr>
+            <tr><td>相机</td><td>仅在你选择扫描悬浮窗布局分享码时使用摄像头识别分享码。</td><td>使用扫码功能时按需申请，可拒绝或撤销。未授权时无法使用相机扫码，但可以选择已有图片导入布局。</td></tr>
+            <tr><td>无障碍服务</td><td>可选地接收窗口变化事件，以窗口状态变化触发后台监测恢复；不读取屏幕内容，不执行手势。</td><td>需要你在系统无障碍设置中手动开启。未开启时少一种后台恢复手段，不影响应用内使用、布局编辑或扫码导入。</td></tr>
+            <tr><td>唤醒锁</td><td>短时间保持处理流程完成，避免记录写入中途被暂停。</td><td>系统自动授予，无需单独确认，没有对应的运行时授权开关。</td></tr>
+            <tr><td>存储写入（Android 9 及以下）</td><td>在旧版 Android 上将赞赏码、布局分享码和分享海报保存到相册；Android 10 及以上使用系统媒体接口，不申请这项旧权限。</td><td>仅在 Android 8–9 保存图片时按需申请，可拒绝或撤销。未授权时相关图片可能无法保存，不影响监测和布局编辑。</td></tr>
+            <tr><td>系统图片与文件选择器</td><td>读取你选中的壁纸、布局分享图片或备份文件，或导出备份到你选择的位置；不申请整个相册或所有文件的访问权限。</td><td>通过系统选择器主动选择内容，不是整个相册或所有文件的权限授权。取消选择只会取消本次操作。</td></tr>
+            <tr><td>网络状态</td><td>读取网络连接状态，用于连接信息卡片和网络速率组件；这不等于互联网访问权限。</td><td>系统自动授予，无需单独确认，没有对应的运行时授权开关，也不会因此获得联网能力。</td></tr>
+            <tr><td>Wi-Fi 状态</td><td>读取系统允许提供的 Wi-Fi 连接、链路速率、频段和信号信息。</td><td>系统自动授予，无需单独确认；可读信息取决于 Android 版本和系统限制。</td></tr>
+            <tr><td>基础电话状态</td><td>在系统支持时读取移动网络的基础状态，为连接信息卡片提供数据。</td><td>Android 13 及以上的普通权限，无需单独确认；不授权读取通话记录、短信或电话号码。</td></tr>
+          </tbody>
+        </table>
+      </section>
+      <section>
+        <h2>关于无障碍服务</h2>
+        <p>无障碍服务是可选的高级保活手段，默认不会自动开启。当前实现具有以下限制：</p>
+        <ul>
+          <li>配置明确设置为不能读取窗口内容；</li>
+          <li>不能执行点击、滑动或其他手势；</li>
+          <li>不能监听按键，也不启用触摸探索；</li>
+          <li>不会记录屏幕文字、输入内容或使用过的应用；</li>
+          <li>接收窗口变化事件，仅将窗口状态变化用于触发监测服务健康恢复。</li>
+        </ul>
+      </section>
+      <section>
+        <h2>如何撤销权限</h2>
+        <p>你可以在 Android 系统设置的“应用管理 → Yuzu.Power → 权限/特殊访问权限”中撤销相机、通知或悬浮窗等授权。无障碍服务和忽略电池优化可在各自的设置页面关闭；Shizuku 授权可在 Shizuku 的授权应用管理中撤销。不同系统的设置名称可能不同。</p>
+      </section>
+    </article>
+  </main>
+  <footer class="site-footer"><div class="shell footer-bottom"><span>© 2026 Yuzu.Power</span><a href="index.html">返回首页</a><a href="privacy.html">隐私政策</a></div></footer>
+</body>
+</html>

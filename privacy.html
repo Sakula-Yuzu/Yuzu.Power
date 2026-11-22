@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0a0c0b">
+  <meta name="description" content="了解 Yuzu.Power 如何在设备本地处理电池数据、应用设置和充放电记录，以及通知、后台运行等权限的使用方式。Yuzu.Power 不联网、无广告。">
+  <title>隐私政策 - Yuzu.Power</title>
+  <link rel="canonical" href="privacy.html">
+  <link rel="alternate" hreflang="zh-CN" href="privacy.html">
+  <link rel="alternate" hreflang="en" href="en/privacy.html">
+  <link rel="alternate" hreflang="x-default" href="privacy.html">
+  <meta property="og:title" content="隐私政策 - Yuzu.Power">
+  <meta property="og:description" content="了解 Yuzu.Power 如何在设备本地处理电池数据、应用设置和充放电记录，以及通知、后台运行等权限的使用方式。Yuzu.Power 不联网、无广告。">
+  <meta property="og:url" content="https://www.leleone.cn/privacy">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:type" content="website">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon-v2.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/yuzu-power-favicon-v7-32.png">
+  <link rel="icon" href="favicon-rounded-v6.ico">
+  <link rel="mask-icon" href="assets/yuzu-power-safari-mask.svg" color="#2d4a6c">
+  <link rel="stylesheet" href="assets/fonts/harmonyos/harmonyos-site-merged.css">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="responsive.css">
+  <script src="site.js" defer></script>
+</head>
+<body class="subpage">
+  <header class="site-header" data-header>
+    <div class="shell header-inner">
+      <a class="brand" href="index.html"><img src="assets/yuzu-power-icon-source.svg" alt="" width="42" height="42"><span>Yuzu.Power</span></a>
+      <button class="menu-button" type="button" aria-label="打开导航" aria-expanded="false" data-menu-button><span></span><span></span></button>
+      <nav class="nav" aria-label="主导航" data-nav><a href="index.html#experience">界面</a><a href="index.html#features">主题</a><a href="index.html#overlay-promo">悬浮窗</a><a href="index.html#capabilities">功能</a><a href="privacy.html">隐私</a><a href="changelog.html">更新日志</a><a class="nav-download" href="index.html#download">下载</a></nav>
+      <span class="language-switcher header-language" data-active-language="zh" aria-label="语言切换"><a href="privacy.html" lang="zh-CN" aria-current="page">中</a><a href="en/privacy.html" lang="en">EN</a></span>
+    </div>
+  </header>
+  <main>
+    <header class="legal-hero">
+      <div class="shell">
+        <p class="eyebrow">Privacy</p>
+        <h1>隐私政策</h1>
+        <p>我们希望你在使用 Yuzu.Power 前，清楚知道哪些信息会被读取、为什么需要这些信息，以及它们存放在哪里。</p>
+        <div class="legal-meta"><span>生效日期：2026 年 11 月 14 日</span><span>适用版本：3.3.0</span></div>
+      </div>
+    </header>
+    <article class="legal-content">
+      <section>
+        <h2>1. 我们处理的信息</h2>
+        <p>为了提供电池监测功能，Yuzu.Power 会在你的设备本地读取和处理 Android 系统提供的电池及设备运行信息，包括：</p>
+        <ul>
+          <li>电池电量、充电状态、供电方式、温度、电压、电流和系统可提供的循环次数；</li>
+          <li>由上述数据计算的瞬时功率、充放电速度、持续时间、曲线和预计充满时间；</li>
+          <li>Wi-Fi 与移动网络连接信息，包括运营商、网络制式、频段和信号强度（以系统实际提供的信息为准）；</li>
+          <li>应用设置，例如主题、显示项目、通知样式、硬件修正选项、首页组件和悬浮窗布局配置；</li>
+          <li>经你授权后，通过 Shizuku 读取的更多设备运行数据，以及你主动选择的壁纸、布局分享图片或备份文件；</li>
+          <li>在设备本地生成的充放电会话记录。</li>
+        </ul>
+        <p>这些信息用于在应用内、通知栏、实时悬浮窗和桌面小组件中展示设备状态，并生成本地历史记录。相机仅在扫码导入悬浮窗布局时使用；分享码在设备本地识别，不上传扫描画面。</p>
+      </section>
+      <section>
+        <h2>2. 信息存放位置</h2>
+        <p>Yuzu.Power 的设置和充放电记录保存在应用的本地存储空间中，不会上传到开发者服务器。卸载应用或在系统设置中清除应用数据，将删除这些本地信息。</p>
+        <p>Android 系统可能根据你的系统备份设置，将应用数据纳入设备迁移或云备份。此过程由 Android 系统及你选择的备份服务提供者控制，不由 Yuzu.Power 主动发起。</p>
+      </section>
+      <section>
+        <h2>3. 权限与特殊访问</h2>
+        <p>通知、相机、Shizuku、忽略电池优化、悬浮窗、精确闹钟和无障碍服务等访问按系统版本及功能需要申请或由你手动开启。前台服务、开机广播、唤醒锁、网络状态、Wi-Fi 状态和基础电话状态等普通权限由系统自动授予，不会单独弹出授权请求。这些状态读取权限不提供互联网访问能力，Yuzu.Power 不申请互联网访问权限。</p>
+        <p>无障碍服务完全可选，仅把窗口状态变化作为后台监测恢复信号。服务配置禁止读取窗口内容，不能执行手势，不读取输入内容。详细说明见<a href="permissions.html"><strong>权限用途说明</strong></a>。</p>
+      </section>
+      <section>
+        <h2>4. 对外链接</h2>
+        <p>应用内的作者主页等入口可能调用系统浏览器打开第三方网站。离开 Yuzu.Power 后，第三方网站如何处理信息由其自身隐私政策约束。</p>
+      </section>
+      <section>
+        <h2>5. 未成年人保护</h2>
+        <p>Yuzu.Power 是通用设备工具，不以未成年人为特定服务对象，也不会主动收集身份、联系方式或位置信息。如果监护人认为未成年人在使用中遇到隐私问题，可以通过应用内作者入口联系我们。</p>
+      </section>
+      <section>
+        <h2>6. 联系我们</h2>
+        <p>如对本政策或数据处理方式有疑问，请通过 Yuzu.Power 应用“关于”页面中的作者主页联系开发者。</p>
+      </section>
+    </article>
+  </main>
+  <footer class="site-footer"><div class="shell footer-bottom"><span>© 2026 Yuzu.Power</span><a href="index.html">返回首页</a><a href="permissions.html">权限说明</a></div></footer>
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0a0c0b">
+  <meta name="description" content="查看 Yuzu.Power Android 电源监控软件的版本更新记录，包括充电表现评分、充放电预测模型、内置壁纸、低内存模式、记录机制和数据备份等改进。">
+  <title>更新日志 - Yuzu.Power</title>
+  <link rel="canonical" href="changelog.html">
+  <link rel="alternate" hreflang="zh-CN" href="changelog.html">
+  <link rel="alternate" hreflang="en" href="en/changelog.html">
+  <link rel="alternate" hreflang="x-default" href="changelog.html">
+  <meta property="og:title" content="更新日志 - Yuzu.Power">
+  <meta property="og:description" content="查看 Yuzu.Power Android 电源监控软件的版本更新记录，包括充电表现评分、充放电预测模型、内置壁纸、低内存模式、记录机制和数据备份等改进。">
+  <meta property="og:url" content="https://www.leleone.cn/changelog">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:type" content="website">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon-v2.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/yuzu-power-favicon-v7-32.png">
+  <link rel="icon" href="favicon-rounded-v6.ico">
+  <link rel="mask-icon" href="assets/yuzu-power-safari-mask.svg" color="#2d4a6c">
+  <link rel="stylesheet" href="assets/fonts/harmonyos/harmonyos-site-merged.css">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="responsive.css">
+  <script src="site.js" defer></script>
+</head>
+<body class="subpage">
+  <header class="site-header" data-header>
+    <div class="shell header-inner">
+      <a class="brand" href="index.html"><img src="assets/yuzu-power-icon-source.svg" alt="" width="42" height="42"><span>Yuzu.Power</span></a>
+      <button class="menu-button" type="button" aria-label="打开导航" aria-expanded="false" data-menu-button><span></span><span></span></button>
+      <nav class="nav" aria-label="主导航" data-nav><a href="index.html#experience">界面</a><a href="index.html#features">主题</a><a href="index.html#overlay-promo">悬浮窗</a><a href="index.html#capabilities">功能</a><a href="privacy.html">隐私</a><a href="changelog.html">更新日志</a><a class="nav-download" href="index.html#download">下载</a></nav>
+      <span class="language-switcher header-language" data-active-language="zh" aria-label="语言切换"><a href="changelog.html" lang="zh-CN" aria-current="page">中</a><a href="en/changelog.html" lang="en">EN</a></span>
+    </div>
+  </header>
+  <main>
+    <header class="legal-hero">
+      <div class="shell">
+        <p class="eyebrow">Release notes</p>
+        <h1>更新日志</h1>
+        <p>记录 Yuzu.Power 每个公开版本的功能变化、兼容性说明和重要修复。</p>
+      </div>
+    </header>
+    <article class="legal-content">
+      <div class="version-block" id="v3-3-0">
+        <div class="version-head"><h2>Yuzu.Power 3.3.0</h2><span>2026年11月14日</span></div>
+        <span class="version-tag">已发布</span>
+        <h3>更新内容</h3>
+        <ul>
+          <li>新增连接信息卡片，支持展示 Wi-Fi 与移动网络的连接信息，包括运营商、网络制式、频段及信号强度，并支持多 SIM 卡展示和展开详情。</li>
+          <li>新增网络速率悬浮组件，分别显示实时上传和下载速率。</li>
+          <li>新增自律空间，支持一键定时冷藏第三方 App，并可设置豁免应用；本次冷藏的应用到期自动恢复，减少干扰，帮助专注。</li>
+          <li>新增守护恢复统计，显示 Shizuku 监控守护近 24 小时成功恢复监控的次数。</li>
+          <li>更新放电剩余时间预测模型，提升预测准确性，降低预测计算功耗。</li>
+          <li>优化后台采样与任务调度，降低内存占用并大幅降低待机功耗。</li>
+          <li>优化主页卡片的文字适配、堆叠切换及详情展开动画。</li>
+          <li>优化悬浮窗编辑器的组件添加与预览切换体验。</li>
+          <li>诸多其他优化与修复。</li>
+        </ul>
+      </div>
+      <div class="version-block" id="v3-2-0">
+        <div class="version-head"><h2>Yuzu.Power 3.2.0</h2><span>2026年11月3日</span></div>
+        <span class="version-tag">已发布</span>
+        <h3>更新内容</h3>
+        <ul>
+          <li>新增应用冰箱（测试功能），支持通过 Shizuku 冷冻、冷藏和恢复应用，并可通过冰箱抽屉进行批量操作。</li>
+          <li>优化历史记录的采样与压缩存储机制，减少长期使用时的数据占用。</li>
+          <li>优化主页卡片的尺寸适配、文字排版和切换动画。</li>
+          <li>优化电量与温度曲线的平滑效果，以及曲线切换和充放电记录展开时的动画表现。</li>
+          <li>优化充放电记录详情的加载体验。</li>
+          <li>优化自动校准界面在不同屏幕尺寸下的显示效果。</li>
+          <li>修复部分情况下选择主页壁纸后无法进入裁剪界面的问题。</li>
+          <li>优化诸多细节并修复已知问题。</li>
+        </ul>
+      </div>
+      <div class="version-block" id="v3-1-0">
+        <div class="version-head"><h2>Yuzu.Power 3.1.0</h2><span>2026年10月31日</span></div>
+        <span class="version-tag">已发布</span>
+        <h3>更新内容</h3>
+        <ul>
+          <li>新增应用耗电统计，支持通过 Shizuku 获取应用耗电排行与详情，并提供搜索、排序和分类筛选。</li>
+          <li>新增 Shizuku 监控守护，在监控进程异常退出时尝试恢复。</li>
+          <li>主页堆叠卡片支持长按展开。</li>
+          <li>优化诸多细节并修复已知问题。</li>
+        </ul>
+      </div>
+      <div class="version-block" id="v3-0-1">
+        <div class="version-head"><h2>Yuzu.Power 3.0.1</h2><span>2026年10月25日</span></div>
+        <span class="version-tag">已发布</span>
+        <h3>更新内容</h3>
+        <ul>
+          <li>修复问题并优化使用体验。</li>
+        </ul>
+      </div>
+      <div class="version-block" id="v3-0-0">
+        <div class="version-head"><h2>Yuzu.Power 3.0.0</h2><span>2026年10月25日</span></div>
+        <span class="version-tag">已发布</span>
+        <h3>更新内容</h3>
+        <ul>
+          <li>接入 Shizuku，授权后可读取更多设备数据。</li>
+          <li>首页全面重构，新增多种组件卡片，支持自由添加、拖动排序、调整大小和堆叠。</li>
+          <li>悬浮窗全面重构，新增更多数据与功能组件；支持自定义布局、保存和切换多套方案，并可自定义语言、字体和深浅色主题，分别调节背景与内容透明度、设置自动变淡程度，以及记忆横竖屏位置。</li>
+          <li>新增悬浮窗布局分享，可生成分享海报和分享码，也可扫码或从图片导入布局。</li>
+          <li>新增“黑曜”“赤焰”主题，并优化现有主题配色。</li>
+          <li>新增自动校准引导。</li>
+          <li>新增充电动画。</li>
+          <li>新增粒子星海特效，并应用于自动校准引导和充电动画界面，支持 HDR 效果。</li>
+          <li>新增一张内置壁纸。</li>
+          <li>优化诸多细节并修复已知问题。</li>
+        </ul>
+      </div>
+      <div class="version-block">
+        <div class="version-head"><h2>Yuzu.Power 2.5.0</h2><span>2026年9月30日</span></div>
+        <span class="version-tag">已发布</span>
+        <h3>更新内容</h3>
+        <ul>
+          <li>新增实时数据悬浮窗，可在 APP 外直接查看电量、温度、热状态、功率、电压、电流、CPU 频率等实时数据。</li>
+          <li>诸多细节优化。</li>
+        </ul>
+      </div>
+      <div class="version-block">
+        <div class="version-head"><h2>Yuzu.Power 2.4.1</h2><span>2026年9月11日</span></div>
+        <span class="version-tag">已发布</span>
+        <h3>更新内容</h3>
+        <ul>
+          <li>诸多细节优化。</li>
+        </ul>
+      </div>
+      <div class="version-block">
+        <div class="version-head"><h2>Yuzu.Power 2.4.0</h2><span>2026年9月11日</span></div>
+        <span class="version-tag">已发布</span>
+        <h3>更新内容</h3>
+        <ul>
+          <li>新增充电表现评分，对满足条件的充电过程自动评分。</li>
+          <li>新增实时通知图标模式显示温度功能。</li>
+          <li>优化了充电与续航预测模型。</li>
+          <li>优化了充电会话的判定、断点处理和历史记录重建，减少记录中断和数据不完整。</li>
+          <li>优化了低内存占用模式使用体验。</li>
+          <li>诸多细节优化。</li>
+        </ul>
+      </div>
+      <div class="version-block">
+        <div class="version-head"><h2>Yuzu.Power 2.3.1</h2><span>2026年8月26日</span></div>
+        <span class="version-tag">已发布</span>
+        <h3>更新内容</h3>
+        <ul>
+          <li>优化了充电与续航预测模型。</li>
+        </ul>
+      </div>
+      <div class="version-block">
+        <div class="version-head"><h2>Yuzu.Power 2.3.0</h2><span>2026年8月23日</span></div>
+        <span class="version-tag">已发布</span>
+        <h3>更新内容</h3>
+        <ul>
+          <li>增加主页卡片模糊功能，质感更高级。</li>
+          <li>增加 5 张内置壁纸。</li>
+          <li>再次优化低内存占用模式，开启后内存占用更低。</li>
+          <li>优化充放电记录判定机制，减少因后台被清理导致记录频繁断开、杂乱无章的情况。</li>
+          <li>增加数据备份与还原功能。</li>
+          <li>诸多细节优化。</li>
+        </ul>
+      </div>
+    </article>
+  </main>
+  <footer class="site-footer"><div class="shell footer-bottom"><span>© 2026 Yuzu.Power</span><a href="index.html">返回首页</a><a href="privacy.html">隐私政策</a></div></footer>
+</body>
+</html>
