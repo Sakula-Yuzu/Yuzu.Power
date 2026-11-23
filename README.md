@@ -12,7 +12,7 @@ Yuzu.Power 是由哔哩哔哩 UP 主 [Sakula_小柚柚](https://b23.tv/DTTEDLU) 
 
 > 将每一次充放电过程，转化为可视化曲线记录。
 
-**官方网站**：[https://sakula-yuzu.github.io/Yuzu.Power/](https://sakula-yuzu.github.io/Yuzu.Power/)
+**官方网站**：[https://yuzu.power.sakulayuzu.dpdns.org/](https://yuzu.power.sakulayuzu.dpdns.org/)
 
 ---
 
