@@ -1,0 +1,12 @@
+# Robots.txt for https://yuzu.power.sakulayuzu.dpdns.org/
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://yuzu.power.sakulayuzu.dpdns.org/sitemap.xml
+
+# Content signals (optional, for AI / search transparency)
+# search: yes
+# ai-input: no
+# ai-train: no
